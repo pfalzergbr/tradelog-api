@@ -17,11 +17,17 @@ const app = express();
 const tradeRoutes = require('./routes/tradeRoutes')
 const userRoutes = require('./routes/userRoutes')
 
-//Router Setups
+//Middlewares
+//Parse body
+app.use(express.json())
+//Routers
 app.use('/trades', tradeRoutes)
 app.use('/user', userRoutes)
+//Error handler
+app.use((error, req, res, next) => {
+    res.status(422).send({error: error.message})
+});
 
-//Middleware
 
 
 

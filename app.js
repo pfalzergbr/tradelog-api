@@ -24,16 +24,17 @@ app.use(express.json())
 app.use('/trades', tradeRoutes)
 app.use('/user', userRoutes)
 //Error handler
-app.use((error, req, res, next) => {
-    res.status(422).send({error: error.message})
-});
+
+// app.use((error, req, res, next) => {
+//     res.status(422).send({error: error.message})
+// });
 
 
 
 
 //Connect Mongoose to Database
 
-mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
     .then((result) => {
         app.listen(port, () => {
             console.log(`Waiting for trade data on ${port}`)

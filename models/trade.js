@@ -8,7 +8,9 @@ const TradeSchema = new Schema({
     //Symbol of the trade. Uppercase letters
     symbol: {
         type: String,
-        required: true
+        required: true,
+        uppercase: true,
+        trim: true
     },
     //Win, Loss or Breakeven
     outcome: {

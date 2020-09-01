@@ -15,9 +15,12 @@ exports.getUser = async (req, res) => {
 }
 //Register a new user
 exports.registerUser = async (req, res) => {
+        const user = new User({
+            ...req.body
+        })
     try {
-        const user = await User.create(req.body);
-        res.send(user)
+        await user.save();
+        res.status(201).send(user)
     } catch (error) {
         res.status(400).send(error.message);
     }

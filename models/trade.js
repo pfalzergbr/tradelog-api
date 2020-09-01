@@ -49,6 +49,11 @@ const TradeSchema = new Schema({
     screenshot: {
         //to expand later
         type: Buffer
+    },
+    trader: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
     
     

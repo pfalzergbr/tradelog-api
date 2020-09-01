@@ -75,6 +75,34 @@ userSchema.virtual('strategies', {
     foreignField: 'trader'
 })
 
+//toJSON 
+
+
+//Finds the user for login, and compares the hashed passwords.
+userSchema.statics.findByCredentials = async (email, password) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new Error('Unable to login');
+    }
+
+    const isMatch = await bcrypte.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Unable to login');
+    }
+    return user
+}
+
+//Generates JWT token for authentication
+userSchema.methods.generateAuthToken = async function () {
+    const user = this;
+    const token = jwt.sign({ _id: user.id.toString() }, process.env.JWT_SECRET)
+    user.tokens = user.tokens.concat( { token })
+    await user.save()
+
+    return token;
+}
+
 // Hashing the password with bcrypt, saving on the user object. 
 userSchema.pre('save', async function(next) {
     const user = this;
@@ -82,7 +110,15 @@ userSchema.pre('save', async function(next) {
         user.password = await bcrypt.hash(user.password, 8)
     }
     console.log('password hashed');
-    next()
+    next();
+})
+
+//Deletes all trades and strategies associated with the user. 
+userSchema.pre('remove', async function (next) {
+    const user = this;
+    await Trade.deleteMany({trader: user._id});
+    // await Strategy.deleteMany({trader: user._id});
+    next();
 })
 
 const User = mongoose.model('User', userSchema);

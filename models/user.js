@@ -1,15 +1,17 @@
 //Requires
 const mongoose = require('mongoose')
-    // Further packages to look for later: jsonwebtoken, bcrypt, validator
 const validator = require('validate')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Trade = require('./trade')
 
+//Enviromental Variables
+const jwtSecret = process.env.JWT_SECRET
 
 //Create a trade Schema
 const Schema = mongoose.Schema;
 
+//User Schema setup
 const userSchema = new Schema({
     name: {
         type: String,
@@ -75,7 +77,7 @@ userSchema.virtual('strategies', {
     foreignField: 'trader'
 })
 
-//toJSON 
+//toJSON - Hide sensitive user data from responses, no password, tokens, etc
 
 
 //Finds the user for login, and compares the hashed passwords.
@@ -85,7 +87,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
         throw new Error('Unable to login');
     }
 
-    const isMatch = await bcrypte.compare(password, user.password)
+    const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
         throw new Error('Unable to login');
@@ -96,7 +98,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 //Generates JWT token for authentication
 userSchema.methods.generateAuthToken = async function () {
     const user = this;
-    const token = jwt.sign({ _id: user.id.toString() }, process.env.JWT_SECRET)
+    const token = jwt.sign({ _id: user.id.toString() }, jwtSecret)
     user.tokens = user.tokens.concat( { token })
     await user.save()
 

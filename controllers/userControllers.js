@@ -3,8 +3,8 @@
 const User = require('../models/user')
 
 //Fetch a user from the database
-exports.getUser = async (req, res) => {
-    const _id = await req.params.id;
+exports.getProfile = async (req, res) => {
+    const _id = req.user._id;
     try {
         const user = await User.find({_id})
         res.send(user)
@@ -44,6 +44,7 @@ exports.loginUser = async (req, res) => {
     }
 }
 
+//Log out a user from the app.
 exports.logoutUser = async (req, res) => {
     console.log('Main function runs', req.user)
     try {
@@ -60,7 +61,7 @@ exports.logoutUser = async (req, res) => {
 
 //Update user information
 exports.updateUser = async (req, res) => {
-    const _id = req.params.id;
+    const _id = req.user.id;
     try {
         //Finds the user and update based on request body. 
         const user = await User.findByIdAndUpdate({_id}, req.body)
@@ -74,7 +75,7 @@ exports.updateUser = async (req, res) => {
 
 //Delete a user
 exports.deleteUser = async(req, res) => {
-    const _id = req.params.id;
+    const _id = req.user._id;
 
     try {
         const user  = await User.findOneAndRemove({_id})

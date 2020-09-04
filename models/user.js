@@ -79,6 +79,15 @@ userSchema.virtual('strategies', {
 
 //toJSON - Hide sensitive user data from responses, no password, tokens, etc
 
+userSchema.methods.toJSON = function () {
+    const user = this;
+    const userObject = user.toObject()
+
+    delete userObject.password;
+    delete userObject.tokens
+
+    return userObject;
+}
 
 //Finds the user for login, and compares the hashed passwords.
 userSchema.statics.findByCredentials = async (email, password) => {

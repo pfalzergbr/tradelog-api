@@ -51,7 +51,7 @@ const TradeSchema = new Schema({
         type: Buffer
     },
     trader: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     }
@@ -61,5 +61,5 @@ const TradeSchema = new Schema({
     timestamps: true
 });
 
-const Trade = mongoose.model('trade', TradeSchema)
+const Trade = mongoose.model('Trade', TradeSchema)
 module.exports = Trade

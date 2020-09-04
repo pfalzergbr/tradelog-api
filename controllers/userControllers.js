@@ -45,8 +45,9 @@ exports.loginUser = async (req, res) => {
 }
 
 exports.logoutUser = async (req, res) => {
+    console.log('Main function runs', req.user)
     try {
-        req.user.tokens = req.user.tokens.filter((token) =>{
+        req.user.tokens = req.user.tokens.filter((token) => {
             return token.token !== req.token
         })
         await req.user.save()

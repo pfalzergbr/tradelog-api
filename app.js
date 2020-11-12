@@ -21,8 +21,8 @@ const userRoutes = require('./routes/userRoutes')
 //Parse body
 app.use(express.json())
 //Routers
-app.use('/trades', tradeRoutes)
-app.use('/user', userRoutes)
+app.use('/api/trades', tradeRoutes)
+app.use('/api/user', userRoutes)
 //Error handler
 
 // app.use((error, req, res, next) => {

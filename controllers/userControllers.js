@@ -2,6 +2,8 @@
 
 const User = require('../models/user')
 
+
+// GET '/api/user/profile'
 //Fetch a user from the database
 exports.getProfile = async (req, res) => {
     const _id = req.user._id;
@@ -13,6 +15,8 @@ exports.getProfile = async (req, res) => {
     }
 
 }
+
+// POST '/api/user/'
 //Register a new user
 exports.registerUser = async (req, res) => {
         const user = new User({
@@ -27,6 +31,7 @@ exports.registerUser = async (req, res) => {
     }
 }
 
+// POST '/api/user/login'
 //Log in a user
 exports.loginUser = async (req, res) => {
     //Destructure password from the body of the request
@@ -44,6 +49,8 @@ exports.loginUser = async (req, res) => {
     }
 }
 
+
+// POST '/api/user/logout'
 //Log out a user from the app.
 exports.logoutUser = async (req, res) => {
     console.log('Main function runs', req.user)
@@ -59,6 +66,7 @@ exports.logoutUser = async (req, res) => {
 }
 
 
+// PATCH '/api/user/profile
 //Update user information
 exports.updateUser = async (req, res) => {
     const _id = req.user.id;
@@ -73,6 +81,7 @@ exports.updateUser = async (req, res) => {
     }
 }
 
+// DELETE '/api/user/profile
 //Delete a user
 exports.deleteUser = async(req, res) => {
     const _id = req.user._id;

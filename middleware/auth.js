@@ -1,5 +1,5 @@
 //Requires
-const jwt = require('jsonWebtoken');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user')
 
 //Enviromental Variables

@@ -10,15 +10,14 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 //Add a new trade to the database
-router.post('/', auth, tradeController.addNewTrade)
+router.post('/', auth, tradeController.addNewTrade);
 //Fetch all trades from the database
-router.get('/', auth, tradeController.getAllTrades)
+router.get('/', auth, tradeController.getAllTrades);
 //Fetch one trade from the database
-router.get('/:id', auth, tradeController.getTrade)
+router.get('/:id', auth, tradeController.getTrade);
 //Update a trade in the database
-router.patch('/:id', auth, tradeController.updateTrade)
+router.patch('/:id', auth, tradeController.updateTrade);
 //Delet a trade in the database -- TO WORK ON
-router.delete('/:id', auth, tradeController.deleteTrade)
+router.delete('/:id', auth, tradeController.deleteTrade);
 
-
-module.exports = router
+module.exports = router;

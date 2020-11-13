@@ -14,12 +14,15 @@ const dbUrl =`mongodb+srv://${dbUser}:${dbPassword}@cluster0.paryw.mongodb.net/$
 
 //Router definitions
 const app = express();
+const corsPolicy = require('./middleware/corsPolicy')
 const tradeRoutes = require('./routes/tradeRoutes')
 const userRoutes = require('./routes/userRoutes')
 
 //Middlewares
 //Parse body
 app.use(express.json())
+//Setting CORS headers
+app.use(corsPolicy)
 //Routers
 app.use('/api/trades', tradeRoutes)
 app.use('/api/user', userRoutes)

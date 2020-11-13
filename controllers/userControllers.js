@@ -25,7 +25,8 @@ exports.registerUser = async (req, res) => {
     try {
         const token = await user.generateAuthToken();
         await user.save();
-        res.status(201).send({ user, token });
+        console.log(user, token)
+        res.status(201).send({ user: {userId: user._id, userName: user.name}, token });
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -42,7 +43,7 @@ exports.loginUser = async (req, res) => {
         //Send it back with a response.
         const user = await User.findByCredentials(email, password);
         const token = await user.generateAuthToken();
-        res.status(201).send({user, token});
+        res.status(200).send({ user: {userId: user._id, userName: user.name}, token });
 
     } catch (error) {
         res.status(400).send();

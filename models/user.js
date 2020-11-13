@@ -52,14 +52,14 @@ const userSchema = new Schema(
         //     }
         // ],
 
-        tokens: [
-            {
-                token: {
-                    type: String,
-                    required: true,
-                },
-            },
-        ],
+        // tokens: [
+        //     {
+        //         token: {
+        //             type: String,
+        //             required: true,
+        //         },
+        //     },
+        // ],
     },
     {
         timestamps: true,
@@ -117,7 +117,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 userSchema.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({ _id: user.id.toString() }, jwtSecret);
-    user.tokens = user.tokens.concat({ token });
+    // user.tokens = user.tokens.concat({ token });
     await user.save();
 
     return token;

@@ -1,5 +1,6 @@
 //Package Requires
 const express = require('express');
+const { body } = require('express-validator')
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 
@@ -9,7 +10,21 @@ const router = express.Router();
 const userController = require('../controllers/userControllers');
 
 //Register a new user
-router.post('/', userController.registerUser);
+router.post('/', [
+    body('name')
+        .not().isEmpty()
+        .trim(),
+    body('email')
+        .isEmail()
+        .trim()
+        .normalizeEmail(),
+    body('password')
+        .isLength({min: 6}),
+    body('verify')
+        .isLength({min: 6})
+], 
+userController.registerUser);
+
 //Log in a user
 router.post('/login', userController.loginUser);
 //Log out a user

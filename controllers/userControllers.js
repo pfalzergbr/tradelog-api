@@ -1,7 +1,8 @@
+const { validationResult } = require('express-validator')
+
 //Require Models
-
 const User = require('../models/user')
-
+const HttpError = require('../models/http-error')
 
 // GET '/api/user/profile'
 //Fetch a user from the database
@@ -15,13 +16,37 @@ exports.getProfile = async (req, res) => {
     }
 
 }
-
+////////////////////////////////
 // POST '/api/user/'
 //Register a new user
-exports.registerUser = async (req, res) => {
-        const user = new User({
+////////////////////////////////
+exports.registerUser = async (req, res, next) => {
+    const errors = validationResult(req);
+    // Check for validation errors
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid inputs passed, please check your data', 422));
+    }
+    //Check if e-mail address is already taken. 
+    const email = req.body.email;
+    let existingUser;
+    try {
+        existingUser = await User.findOne({email});
+    } catch (error) {
+        return next(new HttpError('Registration failed, please try again later', 500));
+    }
+
+    if (existingUser) {
+        return next( new HttpError('E-mail address is already registered, please log.', 422));
+    }
+
+    //Create a new user based on the User model, spreading the request body. 
+    const user = new User({
             ...req.body
-        })
+    })
+
+    //Create a new JWT token, and saves the user into the database. Returns a user object with a name
+    //and Id, and the token for the front-end. 
     try {
         const token = await user.generateAuthToken();
         await user.save();
@@ -32,8 +57,12 @@ exports.registerUser = async (req, res) => {
     }
 }
 
+
+////////////////////////////////
 // POST '/api/user/login'
 //Log in a user
+////////////////////////////////
+
 exports.loginUser = async (req, res) => {
     //Destructure password from the body of the request
     const { email, password } = req.body;

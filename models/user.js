@@ -42,15 +42,15 @@ const userSchema = new Schema(
             type: String,
         },
 
-        // trades: [
-        //     {
-        //         tradeId: {
-        //             type: Schema.Types.ObjectId,
-        //             ref: 'Trade',
-        //             required: true
-        //         }
-        //     }
-        // ],
+        trades: [
+            {
+                tradeId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Trade',
+                    required: true
+                }
+            }
+        ],
 
         // tokens: [
         //     {
@@ -68,11 +68,11 @@ const userSchema = new Schema(
 
 //Virtuals to add: trades, strategies, accounts
 
-userSchema.virtual('trades', {
-    ref: 'Trade',
-    localField: '_id',
-    foreignField: 'trader',
-});
+// userSchema.virtual('trades', {
+//     ref: 'Trade',
+//     localField: '_id',
+//     foreignField: 'trader',
+// });
 
 userSchema.virtual('strategies', {
     ref: 'Strategy',

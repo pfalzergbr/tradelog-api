@@ -31,7 +31,7 @@ const TradeSchema = new Schema(
         //Date and time of the trade. Different from the createdAt.
         date: {
             //Update for using moment, once the front-end is in working condition
-            type: Number,
+            type: Date,
         },
         //Description of the trade for later review
         description: {
@@ -41,7 +41,7 @@ const TradeSchema = new Schema(
         strategy: {
             type: String,
         },
-        //Should point at the user, who created the trade.
+        
         accountId: {
             //to expand functionality later, to manage multiple accounts per user
             type: Number,
@@ -51,6 +51,7 @@ const TradeSchema = new Schema(
             //to expand later
             type: String,
         },
+        //Should point at the user, who created the trade.
         trader: {
             type: Schema.Types.ObjectId,
             required: true,

@@ -1,17 +1,35 @@
-// const express = require('express')
-// const mongoose = require('mongoose')
+const { validationResult } = require('express-validator')
 
 //require Models
 const Trade = require('../models/trade'); 
+const HttpError = require('../models/http-error')
 
-
-//Adds a new trade to the database
+////////////////////////////////
+// POST /api/trades/
+// Adds a new trade to the database
+// Looking for basic information. 
+////////////////////////////////
 exports.addNewTrade = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid inputs passed, please check your data', 422));
+     }
+
+    //Create new trade object with reference to the trader. 
     const trade = new Trade({
         ...req.body,
         trader: req.user._id
     })
 
+    //Tidy up the incoming data. Convert symbol to uppercase.
+    trade.symbol = trade.symbol.toUpperCase()
+    //Swapping the amount for a negative value if the outcome is a loss. 
+    if (trade.outcome === 'loss' && trade.amount > 0){
+        trade.amount = -(trade.amount)
+    }
+    console.log(trade)
     try {
         await trade.save()
         res.status(201).send(trade)
@@ -19,7 +37,11 @@ exports.addNewTrade = async (req, res, next) => {
         res.status(422).send(error.message)
     }
 }
+
+////////////////////////////////
+// GET '/api/trades/'
 //Fetches all trades from the database
+////////////////////////////////
 exports.getAllTrades = async (req, res) => {
     try { 
         const trades = await Trade.find({ trader: req.user._id })

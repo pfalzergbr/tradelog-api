@@ -28,7 +28,8 @@ exports.registerUser = async (req, res, next) => {
             new HttpError('Invalid inputs passed, please check your data', 422));
     }
     //Check if e-mail address is already taken. 
-    const email = req.body.email;
+    const {name, email, password, verify} = req.body;
+
     let existingUser;
     try {
         existingUser = await User.findOne({email});
@@ -38,6 +39,10 @@ exports.registerUser = async (req, res, next) => {
 
     if (existingUser) {
         return next( new HttpError('E-mail address is already registered, please log.', 422));
+    }
+    //Checks if password and password verification are equal.
+    if ( password !== verify) {
+        return next( new HttpError('Password doesn`t match with confirmation, please check.', 422));
     }
 
     //Create a new user based on the User model, spreading the request body. 
@@ -64,6 +69,13 @@ exports.registerUser = async (req, res, next) => {
 ////////////////////////////////
 
 exports.loginUser = async (req, res) => {
+    const errors = validationResult(req);
+    //Check for validation erros
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid credentials, please trry again', 422));
+    }
+
     //Destructure password from the body of the request
     const { email, password } = req.body;
 
@@ -80,24 +92,14 @@ exports.loginUser = async (req, res) => {
 }
 
 
-// POST '/api/user/logout'
-//Log out a user from the app.
-exports.logoutUser = async (req, res) => {
-    console.log('Main function runs', req.user)
-    try {
-        req.user.tokens = req.user.tokens.filter((token) => {
-            return token.token !== req.token
-        })
-        await req.user.save()
-        res.status(200).send('Logged out')
-    } catch (error) {
-        res.status(500).send()
-    }
-}
 
-
+////////////////////////////////
 // PATCH '/api/user/profile
 //Update user information
+////////////////////////////////
+
+// TODO!!
+
 exports.updateUser = async (req, res) => {
     const _id = req.user.id;
     try {
@@ -111,8 +113,12 @@ exports.updateUser = async (req, res) => {
     }
 }
 
+////////////////////////////////
 // DELETE '/api/user/profile
 //Delete a user
+////////////////////////////////
+
+//TODO
 exports.deleteUser = async(req, res) => {
     const _id = req.user._id;
 

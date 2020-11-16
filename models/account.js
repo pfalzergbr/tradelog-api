@@ -3,31 +3,31 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const StrategySchema = new Schema({
-    strategyName: {
+const AccountSchema = new Schema({
+    accountName: {
         type: String,
         required: true,
     },
-    description: {
-        type: String,
-    },
-    account: {
-        type: Schema.Types.ObjectId,
+    accountBalance: {
+        type: Number,
         required: true,
-        ref: 'Account',
+    },
+    accountDescription: {
+        type: String,
+        
     },
     trader: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User',
     },
-    trades: [
+    strategies: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Trade',
+            ref: 'Strategy',
         },
     ],
 });
 
-const Strategy = mongoose.model('Strategy', StrategySchema);
-module.exports = Strategy
+const Account = mongoose.model('Account', AccountSchema);
+module.exports = Account;

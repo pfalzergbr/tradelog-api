@@ -39,12 +39,15 @@ const TradeSchema = new Schema(
         },
         //Strategy of the trade. Should link to the particular users strategies.
         strategy: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: 'Strategy',
         },
         
-        accountId: {
-            //to expand functionality later, to manage multiple accounts per user
-            type: Number,
+        account: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: 'Account',
         },
         //Upload an optional Screenshot of the trade.
         screenshot: {

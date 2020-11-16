@@ -4,7 +4,8 @@ const validator = require('validate');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Trade = require('./trade');
-
+const Strategy = require('./strategy')
+const Account = require('./Account')
 //Enviromental Variables
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -41,32 +42,20 @@ const userSchema = new Schema(
         avatar: {
             type: String,
         },
-
         trades: [
             {
-                tradeId: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Trade',
-                    required: true
-                }
-            }
+                type: Schema.Types.ObjectId,
+                required: true,
+                ref: 'Account',
+            },
         ],
-
-        // tokens: [
-        //     {
-        //         token: {
-        //             type: String,
-        //             required: true,
-        //         },
-        //     },
-        // ],
     },
     {
         timestamps: true,
     },
 );
 
-//Virtuals to add: trades, strategies, accounts
+// Virtuals to add: trades, strategies, accounts
 
 // userSchema.virtual('trades', {
 //     ref: 'Trade',
@@ -74,17 +63,17 @@ const userSchema = new Schema(
 //     foreignField: 'trader',
 // });
 
-userSchema.virtual('strategies', {
-    ref: 'Strategy',
-    localField: '_id',
-    foreignField: 'trader',
-});
+// userSchema.virtual('strategies', {
+//     ref: 'Strategy',
+//     localField: '_id',
+//     foreignField: 'trader',
+// });
 
-userSchema.virtual('accounts', {
-    ref: 'Accounts',
-    localField: '_id',
-    foreignField: 'trader',
-});
+// userSchema.virtual('accounts', {
+//     ref: 'Accounts',
+//     localField: '_id',
+//     foreignField: 'trader',
+// });
 
 //toJSON - Hide sensitive user data from responses, no password, tokens, etc
 
@@ -137,7 +126,8 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('remove', async function (next) {
     const user = this;
     await Trade.deleteMany({ trader: user._id });
-    // await Strategy.deleteMany({trader: user._id});
+    await Account.deleteMany({ trader: user._id });
+    await Strategy.deleteMany({ trader: user._id });
     next();
 });
 

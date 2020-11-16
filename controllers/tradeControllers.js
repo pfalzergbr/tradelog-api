@@ -53,7 +53,10 @@ exports.getAllTrades = async (req, res) => {
         res.status(400).send(error.message)
     }
 }
+////////////////////////////////
+// GET /api/trades/:id
 //Fetches one trade from the database by Id
+////////////////////////////////
 exports.getTrade = async (req, res) => {
     const _id = req.params.id
     try {

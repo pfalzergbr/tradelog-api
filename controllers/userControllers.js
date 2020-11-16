@@ -4,8 +4,11 @@ const { validationResult } = require('express-validator')
 const User = require('../models/user')
 const HttpError = require('../models/http-error')
 
+////////////////////////////////
 // GET '/api/user/profile'
-//Fetch a user from the database
+//Fetch a user from the database, sends the user object back for the frontend.
+//Password is automatically removed by the User model.
+////////////////////////////////
 exports.getProfile = async (req, res) => {
     const _id = req.user._id;
     try {
@@ -118,7 +121,7 @@ exports.updateUser = async (req, res) => {
 //Delete a user
 ////////////////////////////////
 
-//TODO
+//TODO - tidy up and doublecheck
 exports.deleteUser = async(req, res) => {
     const _id = req.user._id;
 

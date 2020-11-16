@@ -8,6 +8,8 @@ const router = express.Router();
 //Require Controllers
 const userController = require('../controllers/userControllers');
 
+
+//////////// LOGIN, REGISTRATION ///////////////
 //Register a new user
 router.post(
     '/',
@@ -30,6 +32,7 @@ router.post(
     userController.loginUser,
 );
 
+//////////// ACCOUNTS ///////////////
 //Create a new trading account for a user
 router.post(
     '/accounts',
@@ -41,6 +44,12 @@ router.post(
     ],
     userController.createAccount,
 );
+//Get a single trading account. 
+router.get('/accounts/:accountId', auth, userController.getSingleAccount);
+//Get all accounts associated with the user. Id decoded from JWT.
+router.get('/accounts', auth, userController.getAccounts);
+
+//////////// PROFILE INFO< UPDATE AND DELETE ///////////////
 
 //Update user information
 router.patch('/profile', auth, userController.updateUser);

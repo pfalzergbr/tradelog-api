@@ -17,6 +17,7 @@ router.post('/', auth, [
     body('amount').not().isEmpty().isFloat(),
     body('trader').not().isEmpty().isString()
 ] ,tradeController.addNewTrade);
+
 //Fetch all trades from the database
 router.get('/', auth, tradeController.getAllTrades);
 //Fetch one trade from the database

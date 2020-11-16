@@ -1,8 +1,12 @@
 const { validationResult } = require('express-validator')
 
 //Require Models
+// const Strategy = require('../models/strategy');
+const Account = require('../models/account');
 const User = require('../models/user')
-const HttpError = require('../models/http-error')
+const HttpError = require('../models/http-error');
+const { create } = require('../models/user');
+const { use } = require('../routes/userRoutes');
 
 ////////////////////////////////
 // GET '/api/user/profile'
@@ -132,4 +136,26 @@ exports.deleteUser = async(req, res) => {
         res.status(400).send(error.message)
     }
 
+}
+
+
+////////////////////////////////
+// POST '/api/user/accounts
+// Create a new strategy for an existing User. 
+////////////////////////////////
+
+exports.createAccount = async (req, res) => {
+    const _id = req.user._id;
+    console.log('running')
+    //TODO - Add Transactions for better error handling
+    try {
+        const user = await User.findOne({ _id })
+        const createdAccount = new Account({...req.body})
+        user.accounts.push(createdAccount)
+        await createdAccount.save();
+        await user.save();
+        res.status(200).send(createdAccount)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
 }

@@ -21,10 +21,27 @@ router.post(
 );
 
 //Log in a user
-router.post('/login', [
-    body('email').isEmail().trim().normalizeEmail(),
-    body('password').isLength({min: 6}).trim(),
-], userController.loginUser);
+router.post(
+    '/login',
+    [
+        body('email').isEmail().trim().normalizeEmail(),
+        body('password').isLength({ min: 6 }).trim(),
+    ],
+    userController.loginUser,
+);
+
+//Create a new trading account for a user
+router.post(
+    '/accounts',
+    auth,
+    [
+        body('accountName').not().isEmpty().trim(),
+        body('balance').not().isEmpty().isFloat(),
+        body('description').not().isEmpty().isString(),
+    ],
+    userController.createAccount,
+);
+
 //Update user information
 router.patch('/profile', auth, userController.updateUser);
 //Fetch a user from the database

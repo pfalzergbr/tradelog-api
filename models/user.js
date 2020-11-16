@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Trade = require('./trade');
 const Strategy = require('./strategy')
-const Account = require('./Account')
+// const Account = require('./Account')
 //Enviromental Variables
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -42,11 +42,16 @@ const userSchema = new Schema(
         avatar: {
             type: String,
         },
+        accounts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Account',
+        }],
+
         trades: [
             {
                 type: Schema.Types.ObjectId,
                 required: true,
-                ref: 'Account',
+                ref: 'Trade',
             },
         ],
     },
@@ -89,7 +94,7 @@ userSchema.methods.toJSON = function () {
 
 //Finds the user for login, and compares the hashed passwords.
 userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('accounts').populate('trades');
     if (!user) {
         throw new Error('Unable to login');
     }
@@ -99,6 +104,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
     if (!isMatch) {
         throw new Error('Unable to login');
     }
+    console.log(user);
     return user;
 };
 
@@ -126,7 +132,7 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('remove', async function (next) {
     const user = this;
     await Trade.deleteMany({ trader: user._id });
-    await Account.deleteMany({ trader: user._id });
+    // await Account.deleteMany({ trader: user._id });
     await Strategy.deleteMany({ trader: user._id });
     next();
 });

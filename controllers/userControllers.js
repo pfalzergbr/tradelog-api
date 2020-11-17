@@ -5,8 +5,6 @@ const { validationResult } = require('express-validator');
 const Account = require('../models/account');
 const User = require('../models/user');
 const HttpError = require('../models/http-error');
-const { create } = require('../models/user');
-const { use } = require('../routes/userRoutes');
 
 ////////////////////////////////
 // GET '/api/user/profile'
@@ -199,9 +197,42 @@ exports.getSingleAccount = async (req, res) => {
     const _id = req.params.accountId;
     try {
         const account = await Account.findOne({ _id });
-        console.log(account)
+        console.log(account);
         res.status(200).send(account);
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
+
+////////////////////////////////
+// PATCH '/api/user/accounts/:id
+// Get a single trading account
+////////////////////////////////
+
+exports.updateAccount = async (req, res) => {
+    const _id = req.params.accountId;
+    try {
+        const account = await Account.findByIdAndUpdate({ _id }, req.body);
+        const updatedAccount = await Account.findOne({_id})
+        res.send(200).send(updatedAccount).populate('strategies')
+    } catch (errror) {
+        res.status(500).send(error.message)
+    }
+};
+
+
+
+////////////////////////////////
+// Delete '/api/user/accounts/:id
+// Delete a sincle trading account.
+////////////////////////////////
+
+exports.deleteAccount = async (req, res) => {
+    const _id = req.params.accountId;
+    try {
+        const account = await Account.findByIdAndDelete({ _id });
+        res.send(200).send({deleted: account})
+    } catch (errror) {
+        res.status(500).send(error.message)
+    }
+}

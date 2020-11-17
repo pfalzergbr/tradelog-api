@@ -47,7 +47,14 @@ router.post(
 //Get a single trading account. 
 router.get('/accounts/:accountId', auth, userController.getSingleAccount);
 //Update a single trading account
-router.patch('/accounts/:accountId', auth, userController.updateAccount);
+router.patch('/accounts/:accountId', auth, [
+    body('accountName').not().isEmpty().trim(),
+    body('balance').isEmpty(),
+    body('description').not().isEmpty().isString(),
+], userController.updateAccount);
+
+//TODO - ADD VALIDATION
+
 //Delete a single trading account.
 router.delete('/accounts/:accountId', auth, userController.deleteAccount);
 //Get all accounts associated with the user. Id decoded from JWT.

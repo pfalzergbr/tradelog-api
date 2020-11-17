@@ -74,7 +74,7 @@ exports.registerUser = async (req, res, next) => {
         await user.save();
         console.log(user, token);
         res.status(201).send({
-            user: { userId: user._id, userName: user.name },
+            user: { userId: user._id, userName: user.name},
             token,
         });
     } catch (error) {
@@ -104,14 +104,15 @@ exports.loginUser = async (req, res) => {
         //Send it back with a response.
         const user = await User.findByCredentials(email, password);
         const token = await user.generateAuthToken();
+        const accountsField = user.accounts.map(account => { return {_id: account._id, accountName: account.accountName} })
         res.status(200).send({
-            user: { userId: user._id, userName: user.name },
+            user: { userId: user._id, userName: user.name, accounts: accountsField },
             token,
         });
     } catch (error) {
-        res.status(400).send();
+        res.status(400).send(error.message);
     }
-};
+}; 
 
 ////////////////////////////////
 // PATCH '/api/user/profile
@@ -144,7 +145,7 @@ exports.deleteUser = async (req, res) => {
 
     try {
         const user = await User.findOneAndRemove({ _id });
-        res.send(user);
+        res.status(200).send(user);
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -167,6 +168,7 @@ exports.createAccount = async (req, res) => {
         user.accounts.push(createdAccount);
         await createdAccount.save();
         await user.save();
+        console.log(createdAccount)
         res.status(200).send(createdAccount);
     } catch (error) {
         res.status(500).send(error.message);
@@ -214,7 +216,7 @@ exports.updateAccount = async (req, res) => {
     try {
         const account = await Account.findByIdAndUpdate({ _id }, req.body);
         const updatedAccount = await Account.findOne({_id})
-        res.send(200).send(updatedAccount).populate('strategies')
+        res.status(200).send(updatedAccount)
     } catch (errror) {
         res.status(500).send(error.message)
     }
@@ -231,7 +233,7 @@ exports.deleteAccount = async (req, res) => {
     const _id = req.params.accountId;
     try {
         const account = await Account.findByIdAndDelete({ _id });
-        res.send(200).send({deleted: account})
+        res.status(200).send({_id})
     } catch (errror) {
         res.status(500).send(error.message)
     }

@@ -69,8 +69,31 @@ exports.getTrade = async (req, res) => {
         res.status(500).send(error.message)
     }
 }
+
+
+////////////////////////////////
+// GET /api/trades/accounts/:accountId
+//Fetches one trade from the database by Id
+////////////////////////////////
+
+exports.getTradesByAccount = async (req, res) => {
+    const _id = req.params.accountId;
+    try {
+
+    } catch (error) {
+        
+    }
+}
+
 //Update a trade in the database
 exports.updateTrade = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid inputs passed, please check your data', 422));
+    }
+
     const _id = req.params.id
     try {
         const trade = await Trade.findOneAndUpdate({_id, trader: req.user._id}, req.body)

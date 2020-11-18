@@ -5,7 +5,6 @@ const Trade = require('../models/trade');
 const User = require('../models/user');
 const Account = require('../models/account');
 const HttpError = require('../models/http-error');
-const { updateAccount } = require('./userControllers');
 
 ////////////////////////////////
 // POST /api/trades/
@@ -86,9 +85,13 @@ exports.getAllTrades = async (req, res) => {
 //Fetches all trades from the database
 //////////////////////////////////////////
 
-exports.getTradesByAccount = async (req, res) => {
+exports.getTradesByAccount = async (req, res, next) => {
     //Grab accountId from params
     const accountId = req.params.accountId
+    // Checks if the account actually belongs to the trader
+    if (!req.user.accounts.includes(accountId)){
+        return next( new HttpError('You are not authorized to see these trades. Please log in.', 401))
+    }
     //TODO - Add extra security, check if only the owner can access all trades.
     try {
         const trades = await Trade.find({ account: accountId});
@@ -139,15 +142,32 @@ exports.updateTrade = async (req, res) => {
         res.status(400).send(error.message);
     }
 };
+
+
 //Delete a trade from the database
 exports.deleteTrade = async (req, res) => {
     const _id = req.params.id;
 
     try {
+        //Start a new session for removing all references to the trade
+        const session = await mongoose.startSession()
+        session.startTransaction();
         const trade = await Trade.findOneAndRemove({
             _id,
             trader: req.user._id,
-        });
+        }, { session });
+        //Find the account and user associated with the trade
+        const account = await Account.findOne({ _id: trade.account});
+        const user = await User.findOne({ _id: req.user._id});
+        //Pull out the trade references from the account and user documents
+        account.trades.pull(trade);
+        user.trades.pull(trade);
+        //Save changes
+        await account.save({ session })
+        await user.save({ session });
+        ///close and commit the transaction
+        await session.commitTransaction();
+
         res.send(trade);
     } catch (error) {
         res.status(400).send(error.message);

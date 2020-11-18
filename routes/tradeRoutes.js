@@ -30,9 +30,9 @@ router.get('/account/:accountId', auth, tradeController.getTradesByAccount);
 router.get('/', auth, tradeController.getAllTrades);
 //Fetch one trade from the database
 router.get('/:id', auth, tradeController.getTrade);
-//Update a trade in the database
+//Update a trade in the database - TODO: ADD VALIDATION
 router.patch('/:id', auth, tradeController.updateTrade);
-//Delet a trade in the database -- TO WORK ON
+//Delete a trade in the database -- TO WORK ON
 router.delete('/:id', auth, tradeController.deleteTrade);
 
 module.exports = router;

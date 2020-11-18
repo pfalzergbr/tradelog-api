@@ -1,7 +1,6 @@
 const { validationResult } = require('express-validator');
-
+const mongoose = require('mongoose');
 //Require Models
-// const Strategy = require('../models/strategy');
 const Account = require('../models/account');
 const User = require('../models/user');
 const HttpError = require('../models/http-error');
@@ -72,10 +71,9 @@ exports.registerUser = async (req, res, next) => {
     try {
         const token = await user.generateAuthToken();
         await user.save();
-        console.log(user, token);
         res.status(201).send({
-            user: { userId: user._id, userName: user.name},
-            token,
+            user: { userId: user._id, userName: user.name, accounts: user.accounts},
+            token, 
         });
     } catch (error) {
         res.status(400).send(error.message);
@@ -165,10 +163,16 @@ exports.createAccount = async (req, res) => {
     try {
         const user = await User.findOne({ _id });
         const createdAccount = new Account({ ...req.body });
+        // Start a new session, to sync up the account and user save.
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        //Add account Id to the user as well.
         user.accounts.push(createdAccount);
-        await createdAccount.save();
-        await user.save();
-        console.log(createdAccount)
+
+        await createdAccount.save({ session });
+        await user.save({ session });
+        await session.commitTransaction();
+
         res.status(200).send(createdAccount);
     } catch (error) {
         res.status(500).send(error.message);
@@ -199,7 +203,6 @@ exports.getSingleAccount = async (req, res) => {
     const _id = req.params.accountId;
     try {
         const account = await Account.findOne({ _id });
-        console.log(account);
         res.status(200).send(account);
     } catch (error) {
         res.status(500).send(error.message);

@@ -37,12 +37,12 @@ const TradeSchema = new Schema(
         description: {
             type: String,
         },
-        //Strategy of the trade. Should link to the particular users strategies.
-        strategy: {
-            type: Schema.Types.ObjectId,
-            required: true,
-            ref: 'Strategy',
-        },
+        //Strategy of the trade. Should link to the particular users strategies. TODO -ADD LATER
+        // strategy: {
+        //     type: Schema.Types.ObjectId,
+        //     // required: true,
+        //     ref: 'Strategy',
+        // },
         
         account: {
             type: Schema.Types.ObjectId,

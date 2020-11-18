@@ -1,6 +1,8 @@
 //Requires
 const mongoose = require('mongoose');
 
+const Trade = require('./trade');
+
 const Schema = mongoose.Schema;
 
 const accountSchema = new Schema({
@@ -20,12 +22,12 @@ const accountSchema = new Schema({
         required: true,
         ref: 'User',
     },
-    strategies: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Strategy',
-        },
-    ],
+    // strategies: [
+    //     {
+    //         type: Schema.Types.ObjectId,
+    //         ref: 'Strategy',
+    //     },
+    // ],
     trades: [
         {
             type: Schema.Types.ObjectId,
@@ -33,6 +35,13 @@ const accountSchema = new Schema({
         },
     ],
 });
+
+//Deleting all trades belonging to this account in trades collection.
+accountSchema.pre('remove', async function (next) {
+    const account = this;
+    await Trade.deleteMany({trader: account._id})
+    next();
+})
 
 const Account = mongoose.model('Account', accountSchema);
 module.exports = Account;

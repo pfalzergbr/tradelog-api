@@ -46,6 +46,27 @@ const userSchema = new Schema(
             ref: 'Account',
         }],
 
+        stats: {
+            wins: {
+                type: Number
+            },
+            losses: {
+                type: Number
+            },
+            breakevens: {
+                type: Number
+            }
+        },
+
+        pnl: {
+            totalProfit: {
+                type: Number
+            },
+            totalLoss: {
+                type: Number
+            }
+        },
+        
         trades: [
             {
                 type: Schema.Types.ObjectId,

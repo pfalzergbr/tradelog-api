@@ -17,6 +17,28 @@ const accountSchema = new Schema({
     description: {
         type: String,
     },
+
+    stats: {
+        wins: {
+            type: Number
+        },
+        losses: {
+            type: Number
+        },
+        breakevens: {
+            type: Number
+        }
+    },
+
+    pnl: {
+        totalProfit: {
+            type: Number
+        },
+        totalLoss: {
+            type: Number
+        }
+    },
+
     trader: {
         type: Schema.Types.ObjectId,
         required: true,

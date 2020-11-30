@@ -9,7 +9,7 @@ const router = express.Router();
 const userController = require('../controllers/userControllers');
 
 
-//////////// LOGIN, REGISTRATION ///////////////
+//------------------ LOGIN, REGISTRATION ------------
 //Register a new user
 router.post(
     '/',
@@ -32,7 +32,11 @@ router.post(
     userController.loginUser,
 );
 
-//////////// ACCOUNTS ///////////////
+// ------------------ ACCOUNTS ------------------------
+
+
+
+
 //Create a new trading account for a user
 router.post(
     '/accounts',
@@ -57,10 +61,24 @@ router.patch('/accounts/:accountId', auth, [
 
 //Delete a single trading account.
 router.delete('/accounts/:accountId', auth, userController.deleteAccount);
+
+
 //Get all accounts associated with the user. Id decoded from JWT.
 router.get('/accounts', auth, userController.getAccounts);
 
-//////////// PROFILE INFO< UPDATE AND DELETE ///////////////
+// ------------------ STRATEGIES ----------------------
+
+
+// Create new Strategy
+
+// Get all strategies by user ID
+
+// Update a strategy
+
+// Delete a strategy
+
+
+// ------------------ PROFILE INFO UPDATE AND DELETE ----------------
 
 //Update user information
 router.patch('/profile', auth, userController.updateUser);

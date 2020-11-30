@@ -111,15 +111,15 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user;
 };
 
-//Generates JWT token for authentication
-userSchema.methods.generateAuthToken = async function () {
-    const user = this;
-    const token = jwt.sign({ _id: user.id.toString() }, jwtSecret);
-    // user.tokens = user.tokens.concat({ token });
-    await user.save();
+// //Generates JWT token for authentication
+// userSchema.methods.generateAuthToken = async function () {
+//     const user = this;
+//     const token = jwt.sign({ _id: user.id.toString() }, jwtSecret);
+//     // user.tokens = user.tokens.concat({ token });
+//     await user.save();
 
-    return token;
-};
+//     return token;
+// };
 
 // Hashing the password with bcrypt, saving on the user object.
 userSchema.pre('save', async function (next) {
@@ -130,14 +130,14 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-//Deletes all trades and strategies associated with the user.
-userSchema.pre('remove', async function (next) {
-    const user = this;
-    await Trade.deleteMany({ trader: user._id });
-    await Account.deleteMany({ trader: user._id });
-    // await Strategy.deleteMany({ trader: user._id });
-    next();
-});
+// //Deletes all trades and strategies associated with the user.
+// userSchema.pre('remove', async function (next) {
+//     const user = this;
+//     await Trade.deleteMany({ trader: user._id });
+//     await Account.deleteMany({ trader: user._id });
+//     // await Strategy.deleteMany({ trader: user._id });
+//     next();
+// });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+// const User = mongoose.model('User', userSchema);
+// module.exports = User;

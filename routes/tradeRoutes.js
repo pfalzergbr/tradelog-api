@@ -29,6 +29,11 @@ router.post(
 
 //Fetch all trades by account ID
 router.get('/account/:accountId', auth, tradeController.getTradesByAccount);
+
+//Fetch all trades by strategy
+//TODO!!!
+router.get('/strategy/:strategyId', auth /*tradeController.getTradesByStrategy*/)
+
 //Fetch one trade from the database
 router.get('/', auth, tradeController.getAllTrades);
 //Fetch one trade from the database

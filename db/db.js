@@ -1,4 +1,4 @@
-const Pool = require('pg').Pool
+const Pool = require('pg').Pool;
 
 const user = process.env.PSQL_USER;
 const password = process.env.PSQL_PASSWORD;
@@ -8,8 +8,8 @@ const database = process.env.PSQL_DBNAME;
 const pool = new Pool({
     user,
     password,
-    host, 
-    database
-})
+    host,
+    database,
+});
 
 module.exports = pool;

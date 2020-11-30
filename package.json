@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.29",
+    "pg": "^8.5.1",
     "validate": "^5.1.0"
   }
 }

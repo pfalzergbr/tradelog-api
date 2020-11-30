@@ -27,6 +27,9 @@ const accountSchema = new Schema({
         },
         breakevens: {
             type: Number
+        },
+        totalTrades: {
+            type: Number
         }
     },
 

@@ -47,13 +47,16 @@ const userSchema = new Schema(
         }],
 
         stats: {
-            wins: {
+            win: {
                 type: Number
             },
-            losses: {
+            loss: {
                 type: Number
             },
-            breakevens: {
+            breakeven: {
+                type: Number
+            },
+            totalTrades: {
                 type: Number
             }
         },
@@ -66,7 +69,7 @@ const userSchema = new Schema(
                 type: Number
             }
         },
-        
+
         trades: [
             {
                 type: Schema.Types.ObjectId,

@@ -20,6 +20,9 @@ router.post(
         body('amount').not().isEmpty().isFloat(),
         body('trader').not().isEmpty().isString(),
         body('account').not().isEmpty().isString(),
+        body('notes').isString(),
+        // body('date').isDate()
+        //Todo: ADD date validation
     ],
     tradeController.addNewTrade,
 );

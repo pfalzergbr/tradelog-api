@@ -14,6 +14,8 @@ const HttpError = require('../models/http-error');
 exports.addNewTrade = async (req, res, next) => {
     const errors = validationResult(req);
 
+    console.log(req.body)
+    
     if (!errors.isEmpty()) {
         return next(
             new HttpError('Invalid inputs passed, please check your data', 422),
@@ -39,8 +41,8 @@ exports.addNewTrade = async (req, res, next) => {
 
     try {
         //Find user an the account separately, to get ready for the write
-        const user = await User.findOne({ _id: userId });
-        const account = await Account.findOne({ _id: accountId });
+        let user = await User.findOne({ _id: userId });
+        let account = await Account.findOne({ _id: accountId });
 
         //Start a new session to sync up three models. TODO - Swap the SQL, not elegant at all
         const session = await mongoose.startSession();
@@ -49,6 +51,9 @@ exports.addNewTrade = async (req, res, next) => {
         //Push the new trade on the trades array, on both account and user. Not efficient, needs refactoring.
         account.trades.push(trade);
         user.trades.push(trade);
+        
+
+
         //Save all three changes, as part of the session
         await account.save({ session });
         await user.save({ session });

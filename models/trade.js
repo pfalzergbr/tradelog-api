@@ -34,7 +34,7 @@ const TradeSchema = new Schema(
             type: Date,
         },
         //Description of the trade for later review
-        description: {
+        notes: {
             type: String,
         },
         //Strategy of the trade. Should link to the particular users strategies. TODO -ADD LATER
@@ -50,10 +50,10 @@ const TradeSchema = new Schema(
             ref: 'Account',
         },
         //Upload an optional Screenshot of the trade.
-        screenshot: {
-            //to expand later
-            type: String,
-        },
+        // screenshot: {
+        //     //to expand later
+        //     type: String,
+        // },
         //Should point at the user, who created the trade.
         trader: {
             type: Schema.Types.ObjectId,

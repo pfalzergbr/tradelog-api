@@ -2,7 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-
+const cors = require('cors')
 //Enviromental Variables
 const dbName = process.env.DBNAME;
 const dbUser = process.env.DBUSER;
@@ -15,7 +15,6 @@ const dbUrl = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.paryw.mongodb.net/
 //Router definitions
 const app = express();
 const errorHandler = require('./middleware/errorHandler')
-const corsPolicy = require('./middleware/corsPolicy');
 const tradeRoutes = require('./routes/tradeRoutes');
 const userRoutes = require('./routes/userRoutes');
 
@@ -23,7 +22,7 @@ const userRoutes = require('./routes/userRoutes');
 //Parse body
 app.use(express.json());
 //Setting CORS headers
-app.use(corsPolicy);
+app.use(cors());
 //Routers
 app.use('/api/trades', tradeRoutes);
 app.use('/api/user', userRoutes);

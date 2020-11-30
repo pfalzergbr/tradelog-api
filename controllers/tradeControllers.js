@@ -13,8 +13,6 @@ const HttpError = require('../models/http-error');
 ////////////////////////////////
 exports.addNewTrade = async (req, res, next) => {
     const errors = validationResult(req);
-
-    console.log(req.body)
     
     if (!errors.isEmpty()) {
         return next(

@@ -9,27 +9,19 @@ const pool = require('../db/db.js');
 // GET '/api/user/profile'
 //Fetch a user from the database, sends the user object back for the frontend.
 
-exports.getProfile = async (req, res) => {
-    // const _id = req.user._id;
-    // try {
-    //     const user = await User.find({ _id });
-    //     res.send(user);
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
-};
+exports.getProfile = async (req, res) => {};
 
 // POST '/api/user/'
 //Register a new user
 
 exports.registerUser = async (req, res, next) => {
-    const errors = validationResult(req);
-    // Check for validation errors
-    if (!errors.isEmpty()) {
-        return next(
-            new HttpError('Invalid inputs passed, please check your data', 422),
-        );
-    }
+    // const errors = validationResult(req);
+    // // Check for validation errors
+    // if (!errors.isEmpty()) {
+    //     return next(
+    //         new HttpError('Invalid inputs passed, please check your data', 422),
+    //     );
+    // }
     //Check if e-mail address is already taken.
     const { name, email, password, verify } = req.body;
 
@@ -107,13 +99,6 @@ exports.registerUser = async (req, res, next) => {
 //TODO wire in accounts
 
 exports.loginUser = async (req, res) => {
-    const errors = validationResult(req);
-    //Check for validation erros
-    if (!errors.isEmpty()) {
-        return next(
-            new HttpError('Invalid credentials, please trry again', 422),
-        );
-    }
     //Destructure password from the body of the request
     const { email, password } = req.body;
     try {

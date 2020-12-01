@@ -1,8 +1,6 @@
 const { validationResult } = require('express-validator');
 //Require utilities
 const HttpError = require('../models/http-error');
-const bcrypt = require('bcrypt');
-const generateAuthToken = require('../utils/generateAuthToken');
 // Require DB
 const pool = require('../db/db.js');
 
@@ -12,7 +10,15 @@ const pool = require('../db/db.js');
 // Create a new strategy for an existing User.
 ////////////////////////////////
 
-exports.createAccount = async (req, res) => {
+exports.createAccount = async (req, res, next) => {
+    const errors = validationResult(req);
+    // Check for validation errors
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid inputs passed, please check your data', 422),
+        );
+    }
+
     const user_id = req.user.user_id;
     const { accountName, balance, description} = req.body;
 
@@ -53,11 +59,12 @@ exports.getAccounts = async (req, res) => {
 ////////////////////////////////
 
 exports.getSingleAccount = async (req, res) => {
+    const user_id = req.user.user_id
     const account_id = req.params.accountId;
     try {
         const result = await pool.query(
-            'SELECT * FROM accounts WHERE account_id = $1',
-            [account_id])
+            'SELECT * FROM accounts WHERE account_id = $1 AND user_id = $2',
+            [account_id, user_id])
         const account = result.rows[0];
         res.status(200).send(account);
     } catch (error) {
@@ -70,15 +77,28 @@ exports.getSingleAccount = async (req, res) => {
 // Get a single trading account
 ////////////////////////////////
 
-exports.updateAccount = async (req, res) => {
-    // const _id = req.params.accountId;
-    // try {
-    //     const account = await Account.findByIdAndUpdate({ _id }, req.body);
-    //     const updatedAccount = await Account.findOne({_id})
-    //     res.status(200).send(updatedAccount)
-    // } catch (errror) {
-    //     res.status(500).send(error.message)
-    // }
+exports.updateAccount = async (req, res, next) => {
+    const errors = validationResult(req);
+    // Check for validation errors
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid inputs passed, please check your data', 422),
+        );
+    }
+    const user_id = req.user.user_id
+    const account_id = req.params.accountId;
+    const { accountName, description} = req.body
+
+    try {
+        const result = await pool.query(
+            'UPDATE accounts SET account_name = $1, description = $2 WHERE account_id = $3 AND user_id = $4 RETURNING *',
+            [accountName, description, account_id, user_id ]
+        )
+        const updatedAccount = result.rows[0];
+        res.status(200).send(updatedAccount)
+    } catch (errror) {
+        res.status(500).send(error.message)
+    }
 };
 
 ////////////////////////////////

@@ -161,10 +161,12 @@ exports.loginUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     const user_id = req.user.id;
     console.log(req.user)
+    console.log(req.body)
     try {
         //Finds the user and update based on request body.
-        // const result = pool.query('UPDATE users SET user_name = $1, user_email = $2 WHERE user_id = $3',
-        //     [req.body.user])
+        const result = await pool.query('UPDATE users SET user_name = $1 WHERE user_id = $2 RETURNING user_id, user_name' ,
+            [req.body.userName, req.user.user_id])
+        const user = result.rows[0];
         // const user = await User.findByIdAndUpdate({ _id }, req.body);
         //Finds the update user
         res.send(user);

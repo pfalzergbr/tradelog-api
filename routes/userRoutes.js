@@ -81,6 +81,7 @@ router.get('/accounts', auth, userController.getAccounts);
 // ------------------ PROFILE INFO UPDATE AND DELETE ----------------
 
 //Update user information
+//TODO - ADD VALIDATION
 router.patch('/profile', auth, userController.updateUser);
 //Fetch a user from the database
 router.get('/profile', auth, userController.getProfile);

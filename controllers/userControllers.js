@@ -6,11 +6,8 @@ const generateAuthToken = require('../utils/generateAuthToken');
 // Require DB
 const pool = require('../db/db.js');
 
-////////////////////////////////
 // GET '/api/user/profile'
 //Fetch a user from the database, sends the user object back for the frontend.
-//Password is automatically removed by the User model.
-////////////////////////////////
 
 exports.getProfile = async (req, res) => {
     // const _id = req.user._id;
@@ -22,10 +19,8 @@ exports.getProfile = async (req, res) => {
     // }
 };
 
-////////////////////////////////
 // POST '/api/user/'
 //Register a new user
-////////////////////////////////
 
 exports.registerUser = async (req, res, next) => {
     const errors = validationResult(req);
@@ -106,10 +101,8 @@ exports.registerUser = async (req, res, next) => {
     }
 };
 
-////////////////////////////////
 // POST '/api/user/login'
 //Log in a user
-////////////////////////////////
 
 //TODO wire in accounts
 
@@ -157,10 +150,8 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-////////////////////////////////
 // PATCH '/api/user/profile
 //Update user information
-////////////////////////////////
 
 // TODO!!
 
@@ -178,10 +169,8 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-////////////////////////////////
 // DELETE '/api/user/profile
 //Delete a user
-////////////////////////////////
 
 //TODO - tidy up and doublecheck
 exports.deleteUser = async (req, res) => {
@@ -193,7 +182,3 @@ exports.deleteUser = async (req, res) => {
     //     res.status(400).send(error.message);
     // }
 };
-
-
-
-

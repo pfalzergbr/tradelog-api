@@ -3,11 +3,10 @@ const { validationResult } = require('express-validator');
 //require Models
 const HttpError = require('../models/http-error');
 
-////////////////////////////////
 // POST /api/trades/
 // Adds a new trade to the database
 // Looking for basic information.
-////////////////////////////////
+
 
 
 exports.addNewTrade = async (req, res, next) => {
@@ -65,10 +64,9 @@ exports.addNewTrade = async (req, res, next) => {
     // }
 };
 
-////////////////////////////////
 // GET '/api/trades/'
 //Fetches all trades from the database
-////////////////////////////////
+
 exports.getAllTrades = async (req, res) => {
     // try {
     //     const trades = await Trade.find({ trader: req.user._id });
@@ -82,10 +80,9 @@ exports.getAllTrades = async (req, res) => {
 };
 
 
-//////////////////////////////////////////
 // GET '/api/trades/account/:accountId'
 //Fetches all trades from the database
-//////////////////////////////////////////
+
 
 exports.getTradesByAccount = async (req, res, next) => {
     // //Grab accountId from params
@@ -103,10 +100,10 @@ exports.getTradesByAccount = async (req, res, next) => {
     // }
 };
 
-//////////////////////////////////////////
+
 // GET /api/trades/:id
 //Fetches one trade from the database by Id
-//////////////////////////////////////////
+
 exports.getTrade = async (req, res) => {
     // const _id = req.params.id;
     // try {

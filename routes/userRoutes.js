@@ -10,6 +10,7 @@ const userController = require('../controllers/userControllers');
 
 
 //------------------ LOGIN, REGISTRATION ------------
+
 //Register a new user
 router.post(
     '/',
@@ -31,7 +32,6 @@ router.post(
     ],
     userController.loginUser,
 );
-
 
 // ------------------ PROFILE INFO UPDATE AND DELETE ----------------
 

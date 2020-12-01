@@ -243,13 +243,16 @@ exports.getAccounts = async (req, res) => {
 ////////////////////////////////
 
 exports.getSingleAccount = async (req, res) => {
-    // const _id = req.params.accountId;
-    // try {
-    //     const account = await Account.findOne({ _id });
-    //     res.status(200).send(account);
-    // } catch (error) {
-    //     res.status(500).send(error.message);
-    // }
+    const account_id = req.params.accountId;
+    try {
+        const result = await pool.query(
+            'SELECT * FROM accounts WHERE account_id = $1',
+            [account_id])
+        const account = result.rows[0];
+        res.status(200).send(account);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 ////////////////////////////////

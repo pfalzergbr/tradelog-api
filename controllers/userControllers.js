@@ -46,7 +46,6 @@ exports.registerUser = async (req, res, next) => {
         );
         existingUser = result.rows;
     } catch (error) {
-        // console.log(error);
         return next(
             new HttpError('Registration failed, please try again later', 500),
         );
@@ -112,29 +111,44 @@ exports.registerUser = async (req, res, next) => {
 //Log in a user
 ////////////////////////////////
 
+//TODO wire in accounts
+
 exports.loginUser = async (req, res) => {
-    // const errors = validationResult(req);
-    // //Check for validation erros
-    // if (!errors.isEmpty()) {
-    //     return next(
-    //         new HttpError('Invalid credentials, please trry again', 422),
-    //     );
-    // }
-    // //Destructure password from the body of the request
-    // const { email, password } = req.body;
-    // try {
-    //     //Search for user with password and email. If there is a result, generate an Auth token.
-    //     //Send it back with a response.
-    //     const user = await User.findByCredentials(email, password);
-    //     const token = await user.generateAuthToken();
-    //     const accountsField = user.accounts.map(account => { return {_id: account._id, accountName: account.accountName} })
-    //     res.status(200).send({
-    //         user: { userId: user._id, userName: user.name, accounts: accountsField },
-    //         token,
-    //     });
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
+    const errors = validationResult(req);
+    //Check for validation erros
+    if (!errors.isEmpty()) {
+        return next(
+            new HttpError('Invalid credentials, please trry again', 422),
+        );
+    }
+    //Destructure password from the body of the request
+    const { email, password } = req.body;
+    try {
+        //Search for user with password and email. If there is a result, generate an Auth token.
+        //Send it back with a response.
+        const response = await pool.query('SELECT * FROM users WHERE user_email = $1', [email])
+        const user = response.rows[0];
+        //Check if there is a user, throw an error if not found
+        if (response.rows.length === 0){
+            throw new Error('Unable to login');
+        }
+        console.log(user)
+        //Check password,
+        const isMatch = await bcrypt.compare(password, user.user_password);
+        // Throw an error if not matching
+        if (!isMatch) {
+            throw new Error('Unable to login');
+        }
+        const token = await generateAuthToken(user);
+
+        // const accountsField = user.accounts.map(account => { return {_id: account._id, accountName: account.accountName} })
+        res.status(200).send({
+            user: { userId: user.user_id, userName: user.user_name, /*accounts: accountsField*/ },
+            token,
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 };
 
 ////////////////////////////////

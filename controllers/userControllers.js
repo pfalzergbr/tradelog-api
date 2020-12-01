@@ -224,13 +224,17 @@ exports.createAccount = async (req, res) => {
 ////////////////////////////////
 
 exports.getAccounts = async (req, res) => {
-    // const _id = req.user._id;
-    // try {
-    //     const user = await User.findOne({ _id }).populate('accounts');
-    //     res.status(200).send(user);
-    // } catch (error) {
-    //     res.status(500).send(error.message);
-    // }
+    const user_id = req.user.user_id;
+
+    try {
+        const result = await pool.query(
+            'SELECT * FROM accounts WHERE user_id = $1',
+            [user_id])
+        const accounts = result.rows;
+        res.status(200).send({accounts});
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 ////////////////////////////////

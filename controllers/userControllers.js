@@ -74,12 +74,12 @@ exports.registerUser = async (req, res, next) => {
     try {
         const result = await pool.query(
             'INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING user_id, user_name, user_email',
-            [ name, email, hashedPassword ],
+            [name, email, hashedPassword],
         );
         user = {
             ...result.rows[0],
         };
-        console.log(user)
+        console.log(user);
     } catch (error) {
         return next(
             new HttpError(
@@ -126,13 +126,16 @@ exports.loginUser = async (req, res) => {
     try {
         //Search for user with password and email. If there is a result, generate an Auth token.
         //Send it back with a response.
-        const response = await pool.query('SELECT * FROM users WHERE user_email = $1', [email])
+        const response = await pool.query(
+            'SELECT * FROM users WHERE user_email = $1',
+            [email],
+        );
         const user = response.rows[0];
         //Check if there is a user, throw an error if not found
-        if (response.rows.length === 0){
+        if (response.rows.length === 0) {
             throw new Error('Unable to login');
         }
-        console.log(user)
+        console.log(user);
         //Check password,
         const isMatch = await bcrypt.compare(password, user.user_password);
         // Throw an error if not matching
@@ -143,7 +146,10 @@ exports.loginUser = async (req, res) => {
 
         // const accountsField = user.accounts.map(account => { return {_id: account._id, accountName: account.accountName} })
         res.status(200).send({
-            user: { userId: user.user_id, userName: user.user_name, /*accounts: accountsField*/ },
+            user: {
+                userId: user.user_id,
+                userName: user.user_name /*accounts: accountsField*/,
+            },
             token,
         });
     } catch (error) {
@@ -159,16 +165,13 @@ exports.loginUser = async (req, res) => {
 // TODO!!
 
 exports.updateUser = async (req, res) => {
-    const user_id = req.user.id;
-    console.log(req.user)
-    console.log(req.body)
     try {
-        //Finds the user and update based on request body.
-        const result = await pool.query('UPDATE users SET user_name = $1 WHERE user_id = $2 RETURNING user_id, user_name' ,
-            [req.body.userName, req.user.user_id])
+        //Finds the user and update based on request body, returns updated row.
+        const result = await pool.query(
+            'UPDATE users SET user_name = $1 WHERE user_id = $2 RETURNING user_id, user_name',
+            [req.body.userName, req.user.user_id],
+        );
         const user = result.rows[0];
-        // const user = await User.findByIdAndUpdate({ _id }, req.body);
-        //Finds the update user
         res.send(user);
     } catch (error) {
         res.status(400).send(error.message);
@@ -200,23 +203,19 @@ exports.deleteUser = async (req, res) => {
 ////////////////////////////////
 
 exports.createAccount = async (req, res) => {
-    // const _id = req.user._id;
-    // //TODO - Add Transactions for better error handling
-    // try {
-    //     const user = await User.findOne({ _id });
-    //     const createdAccount = new Account({ ...req.body });
-    //     // Start a new session, to sync up the account and user save.
-    //     const session = await mongoose.startSession();
-    //     session.startTransaction();
-    //     //Add account Id to the user as well.
-    //     user.accounts.push(createdAccount);
-    //     await createdAccount.save({ session });
-    //     await user.save({ session });
-    //     await session.commitTransaction();
-    //     res.status(200).send(createdAccount);
-    // } catch (error) {
-    //     res.status(500).send(error.message);
-    // }
+    const user_id = req.user.user_id;
+    const { accountName, balance, description} = req.body;
+
+    try {
+        const result = await pool.query(
+            'INSERT INTO accounts (account_name, balance, description, user_id) VALUES($1, $2, $3, $4) RETURNING *',
+            [accountName, balance, description, user_id],
+        );
+        const account = result.rows[0];
+        res.status(200).send(account);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 ////////////////////////////////

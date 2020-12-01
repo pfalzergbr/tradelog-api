@@ -32,51 +32,6 @@ router.post(
     userController.loginUser,
 );
 
-// ------------------ ACCOUNTS ------------------------
-
-
-
-
-//Create a new trading account for a user
-router.post(
-    '/accounts',
-    auth,
-    [
-        body('accountName').not().isEmpty().trim(),
-        body('balance').not().isEmpty().isFloat(),
-        body('description').not().isEmpty().isString(),
-    ],
-    userController.createAccount,
-);
-//Get a single trading account. 
-router.get('/accounts/:accountId', auth, userController.getSingleAccount);
-//Update a single trading account
-router.patch('/accounts/:accountId', auth, [
-    body('accountName').not().isEmpty().trim(),
-    body('balance').isEmpty(),
-    body('description').not().isEmpty().isString(),
-], userController.updateAccount);
-
-//TODO - ADD VALIDATION
-
-//Delete a single trading account.
-router.delete('/accounts/:accountId', auth, userController.deleteAccount);
-
-
-//Get all accounts associated with the user. Id decoded from JWT.
-router.get('/accounts', auth, userController.getAccounts);
-
-// ------------------ STRATEGIES ----------------------
-
-
-// Create new Strategy
-
-// Get all strategies by user ID
-
-// Update a strategy
-
-// Delete a strategy
-
 
 // ------------------ PROFILE INFO UPDATE AND DELETE ----------------
 

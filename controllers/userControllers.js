@@ -159,16 +159,18 @@ exports.loginUser = async (req, res) => {
 // TODO!!
 
 exports.updateUser = async (req, res) => {
-    // const _id = req.user.id;
-    // try {
-    //     //Finds the user and update based on request body.
-    //     const user = await User.findByIdAndUpdate({ _id }, req.body);
-    //     //Finds the update user
-    //     const newUser = await User.findOne({ _id });
-    //     res.send(newUser);
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
+    const user_id = req.user.id;
+    console.log(req.user)
+    try {
+        //Finds the user and update based on request body.
+        // const result = pool.query('UPDATE users SET user_name = $1, user_email = $2 WHERE user_id = $3',
+        //     [req.body.user])
+        // const user = await User.findByIdAndUpdate({ _id }, req.body);
+        //Finds the update user
+        res.send(user);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 };
 
 ////////////////////////////////

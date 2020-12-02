@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const generateAuthToken = require('../utils/generateAuthToken');
 // Require DB
 const pool = require('../db/db.js');
+const userService = require('../services/user-service')
 
 // GET '/api/user/profile'
 //Fetch a user from the database, sends the user object back for the frontend.
@@ -15,36 +16,17 @@ exports.getProfile = async (req, res) => {};
 //Register a new user
 
 exports.registerUser = async (req, res, next) => {
-    // const errors = validationResult(req);
-    // // Check for validation errors
-    // if (!errors.isEmpty()) {
-    //     return next(
-    //         new HttpError('Invalid inputs passed, please check your data', 422),
-    //     );
-    // }
-    //Check if e-mail address is already taken.
     const { name, email, password, verify } = req.body;
 
-    let existingUser;
     try {
-        const result = await pool.query(
-            'SELECT * FROM "users" WHERE user_email = $1',
-            [email],
-        );
-        existingUser = result.rows;
-    } catch (error) {
-        return next(
-            new HttpError('Registration failed, please try again later', 500),
-        );
+        await userService.checkIsEmailRegistered(email);
+    } catch (error){
+        console.log(error)
+        return next(error)
     }
-    if (existingUser.length !== 0) {
-        return next(
-            new HttpError(
-                'E-mail address is already registered, please log.',
-                422,
-            ),
-        );
-    }
+
+
+    
     //Checks if password and password verification are equal.
     if (password !== verify) {
         return next(

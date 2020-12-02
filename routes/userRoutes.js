@@ -2,7 +2,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const auth = require('../middleware/auth');
-const { validation } = require('../middleware/validation')
+const { checkValidation } = require('../middleware/check-Validation')
 
 //Setup Router
 const router = express.Router();
@@ -20,7 +20,7 @@ router.post(
         body('email').isEmail().trim().normalizeEmail(),
         body('password').isLength({ min: 6 }).trim(),
         body('verify').isLength({ min: 6 }),
-    ], validation, 
+    ], checkValidation, 
     userController.registerUser,
 );
 
@@ -30,7 +30,7 @@ router.post(
     [
         body('email').isEmail().trim().normalizeEmail(),
         body('password').isLength({ min: 6 }).trim(),
-    ], validation,
+    ], checkValidation,
     userController.loginUser,
 );
 

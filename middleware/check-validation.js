@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-error');
 
-exports.validation = (req, res, next) => {
+exports.checkValidation = (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

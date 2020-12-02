@@ -18,7 +18,7 @@ CREATE TABLE accounts (
     balance DECIMAL(12,2) NOT NULL DEFAULT 0,
     user_id uuid NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(), 
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 
@@ -32,8 +32,8 @@ CREATE TABLE strategies (
     user_id uuid NOT NULL,
     account_id uuid NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(), 
-    FOREIGN KEY (user_id) REFERENCES users (user_id),
-    FOREIGN KEY (account_id) REFERENCES accounts (account_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (account_id) REFERENCES accounts (account_id) ON DELETE CASCADE
 );
 
 -- Create Enums for trades
@@ -56,7 +56,7 @@ CREATE TABLE trades (
     account_id uuid NOT NULL,,
     strategy_id uuid NOT NULL,,
     created_at TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (user_id) REFERENCES users (user_id),
-    FOREIGN KEY (account_id) REFERENCES accounts (account_id)
-    FOREIGN KEY (strategy_id) REFERENCES strategies (strategy_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (account_id) REFERENCES accounts (account_id) ON DELETE CASCADE,
+    FOREIGN KEY (strategy_id) REFERENCES strategies (strategy_id) ON DELETE CASCADE
 )

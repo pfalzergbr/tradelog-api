@@ -1,9 +1,6 @@
-const { validationResult } = require('express-validator');
-//Require utilities
-const HttpError = require('../models/http-error');
 const bcrypt = require('bcrypt');
 const generateAuthToken = require('../utils/generateAuthToken');
-// Require DB
+
 const pool = require('../db/db.js');
 const userService = require('../services/user-service');
 
@@ -24,7 +21,7 @@ exports.registerUser = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 8);
 
         const userData = { name, email, hashedPassword };
-        const user = await userService.createUser(userData); 
+        const user = await userService.createUser(userData);
 
         const token = await generateAuthToken(user);
 
@@ -36,40 +33,20 @@ exports.registerUser = async (req, res, next) => {
             },
             token,
         });
-
     } catch (error) {
         return next(error);
     }
-
 };
 
 // POST '/api/user/login'
 //Log in a user
 
-//TODO wire in accounts
-
 exports.loginUser = async (req, res) => {
-    //Destructure password from the body of the request
     const { email, password } = req.body;
+
     try {
-        //Search for user with password and email. If there is a result, generate an Auth token.
-        //Send it back with a response.
-        const response = await pool.query(
-            'SELECT * FROM users WHERE user_email = $1',
-            [email],
-        );
-        const user = response.rows[0];
-        //Check if there is a user, throw an error if not found
-        if (response.rows.length === 0) {
-            throw new Error('Unable to login');
-        }
-        console.log(user);
-        //Check password,
-        const isMatch = await bcrypt.compare(password, user.user_password);
-        // Throw an error if not matching
-        if (!isMatch) {
-            throw new Error('Unable to login');
-        }
+        const user = await userService.checkLoginEmail(email);
+        await userService.checkHashedPassword(password, user.user_password);
         const token = await generateAuthToken(user);
 
         // const accountsField = user.accounts.map(account => { return {_id: account._id, accountName: account.accountName} })
@@ -87,8 +64,6 @@ exports.loginUser = async (req, res) => {
 
 // PATCH '/api/user/profile
 //Update user information
-
-// TODO!!
 
 exports.updateUser = async (req, res) => {
     try {

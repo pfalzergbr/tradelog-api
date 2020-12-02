@@ -57,3 +57,8 @@ exports.updateUserProfile = async (userId, update) => {
     const user = await userDb.updateUserById(userId, update);
     return user;
 }
+
+exports.deleteUser = async (userId) => {
+    const user = await userDb.deleteUserById(userId);
+    return user;
+}

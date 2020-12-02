@@ -1,7 +1,5 @@
 const bcrypt = require('bcrypt');
 const generateAuthToken = require('../utils/generateAuthToken');
-
-const pool = require('../db/db.js');
 const userService = require('../services/user-service');
 
 // GET '/api/user/profile'
@@ -89,11 +87,11 @@ exports.updateUser = async (req, res) => {
 
 //TODO - tidy up and doublecheck
 exports.deleteUser = async (req, res) => {
-    // const _id = req.user._id;
-    // try {
-    //     const user = await User.findOneAndRemove({ _id });
-    //     res.status(200).send(user);
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
+    const { user_id } = req.user;
+    try {
+        const user = await userService.deleteUser(user_id);
+        res.status(200).send({message: 'User deleted', user});
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 };

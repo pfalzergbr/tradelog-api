@@ -7,11 +7,11 @@ const userService = require('../services/user-service');
 
 exports.getProfile = async (req, res, next) => {
     const { user_id } = req.user;
-    
+
     try {
         const user = await userService.getUserProfile(user_id);
-        
-        res.status(200).send({user: user})
+
+        res.status(200).send({ user: user });
     } catch (error) {
         return next(error);
     }
@@ -19,7 +19,6 @@ exports.getProfile = async (req, res, next) => {
 
 // POST '/api/user/'
 //Register a new user
-
 exports.registerUser = async (req, res, next) => {
     const { name, email, password, verify } = req.body;
 
@@ -27,7 +26,11 @@ exports.registerUser = async (req, res, next) => {
         await userService.checkIsEmailRegistered(email);
         userService.verifyPassword(password, verify);
         const hashedPassword = await bcrypt.hash(password, 8);
-        const user = await userService.createUser({ name, email, hashedPassword });
+        const user = await userService.createUser({
+            name,
+            email,
+            hashedPassword,
+        });
         const token = await generateAuthToken(user);
 
         res.status(201).send({
@@ -45,8 +48,7 @@ exports.registerUser = async (req, res, next) => {
 
 // POST '/api/user/login'
 //Log in a user
-
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
@@ -63,14 +65,13 @@ exports.loginUser = async (req, res) => {
             token,
         });
     } catch (error) {
-        res.status(400).send(error.message);
+        return next(error);
     }
 };
 
 // PATCH '/api/user/profile
 // Update user information
-
-exports.updateUser = async (req, res) => {
+exports.updateUser = async (req, res, next) => {
     const { user_id } = req.user;
     const { name } = req.body;
 
@@ -78,20 +79,19 @@ exports.updateUser = async (req, res) => {
         const user = await userService.updateUserProfile(user_id, { name });
         res.status(200).send(user);
     } catch (error) {
-        res.status(400).send(error.message);
+        return next(error);
     }
 };
 
 // DELETE '/api/user/profile
 //Delete a user
-
 //TODO - build a PROTECT SHOWCASE function to make some users undeletable.
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
     const { user_id } = req.user;
     try {
         const user = await userService.deleteUser(user_id);
-        res.status(200).send({message: 'User deleted', user});
+        res.status(200).send({ message: 'User deleted', user });
     } catch (error) {
-        res.status(400).send(error.message);
+        return next(error);
     }
 };

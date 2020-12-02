@@ -46,18 +46,18 @@ exports.checkHashedPassword = async (password, userPassword) => {
     }
 };
 
-
+//TODO - Add error handling
 exports.getUserProfile = async (userId) => {
     const user = await userDb.findUserById(userId);
     delete user.user_password;
     return user;
 }
-
+//TODO - Add error handling
 exports.updateUserProfile = async (userId, update) => {
     const user = await userDb.updateUserById(userId, update);
     return user;
 }
-
+//TODO - Add error handling
 exports.deleteUser = async (userId) => {
     const user = await userDb.deleteUserById(userId);
     return user;

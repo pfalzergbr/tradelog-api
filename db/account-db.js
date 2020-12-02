@@ -56,3 +56,14 @@ exports.updateAccountById = async (userId, updatedData) => {
         throw new Error(error.message);
     }
 };
+
+exports.deleteAccountById = async (account_id, user_id) => {
+    const query = 'DELETE FROM accounts WHERE account_id = $1 AND user_id = $2 RETURNING account_id';
+
+    try {
+        const result = await pool.query(query, [account_id, user_id]);
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}

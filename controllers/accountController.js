@@ -63,22 +63,22 @@ exports.updateAccount = async (req, res, next) => {
             account_name,
             description,
         });
-        res.status(200).send(updatedAccount);
+        res.status(200).send({message: 'Account updated', updatedAccount});
     } catch (error) {
         return next(error);
-        // res.status(500).send(error.message);
     }
 };
 
 // Delete '/api/user/accounts/:id
 // Delete a single trading account.
 
-exports.deleteAccount = async (req, res) => {
-    // const _id = req.params.accountId;
-    // try {
-    //     const account = await Account.findByIdAndDelete({ _id });
-    //     res.status(200).send({_id})
-    // } catch (errror) {
-    //     res.status(500).send(error.message)
-    // }
+exports.deleteAccount = async (req, res, next) => {
+    const { accountId: account_id} = req.params;
+    const { user_id } = req.user;
+    try {
+        const deletedAccount = await accountService.deleteAccount(account_id, user_id)
+        res.status(200).send({ message: 'Account deleted', deletedAccount})
+    } catch (error) {
+        return next(error);
+    }
 };

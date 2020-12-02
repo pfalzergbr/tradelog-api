@@ -1,5 +1,3 @@
-// Require DB
-const pool = require('../db/db.js');
 const accountService = require('../services/account-service');
 // POST '/api/accounts
 // Create a new account for an existing User.
@@ -21,8 +19,6 @@ exports.createAccount = async (req, res, next) => {
 };
 
 // GET '/api/user/accounts
-// Get trading accounts for user.
-
 exports.getAccounts = async (req, res, next) => {
     const { user_id } = req.user;
 
@@ -33,10 +29,7 @@ exports.getAccounts = async (req, res, next) => {
         return next(error);
     }
 };
-
 // GET '/api/user/account/:id
-// Get a single trading account
-
 exports.getSingleAccount = async (req, res, next) => {
     const { user_id } = req.user;
     const { accountId: account_id } = req.params;
@@ -50,8 +43,6 @@ exports.getSingleAccount = async (req, res, next) => {
 };
 
 // PATCH '/api/user/accounts/:id
-// Get a single trading account
-
 exports.updateAccount = async (req, res, next) => {
     const { user_id } = req.user;
     const { accountId: account_id } = req.params;
@@ -70,8 +61,6 @@ exports.updateAccount = async (req, res, next) => {
 };
 
 // Delete '/api/user/accounts/:id
-// Delete a single trading account.
-
 exports.deleteAccount = async (req, res, next) => {
     const { accountId: account_id} = req.params;
     const { user_id } = req.user;

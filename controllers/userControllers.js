@@ -3,8 +3,6 @@ const generateAuthToken = require('../utils/generateAuthToken');
 const userService = require('../services/user-service');
 
 // GET '/api/user/profile'
-//Fetch a user from the database, sends the user object back for the frontend.
-
 exports.getProfile = async (req, res, next) => {
     const { user_id } = req.user;
 
@@ -18,7 +16,6 @@ exports.getProfile = async (req, res, next) => {
 };
 
 // POST '/api/user/'
-//Register a new user
 exports.registerUser = async (req, res, next) => {
     const { name, email, password, verify } = req.body;
 
@@ -47,7 +44,6 @@ exports.registerUser = async (req, res, next) => {
 };
 
 // POST '/api/user/login'
-//Log in a user
 exports.loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
@@ -70,7 +66,6 @@ exports.loginUser = async (req, res, next) => {
 };
 
 // PATCH '/api/user/profile
-// Update user information
 exports.updateUser = async (req, res, next) => {
     const { user_id } = req.user;
     const { name } = req.body;
@@ -84,7 +79,6 @@ exports.updateUser = async (req, res, next) => {
 };
 
 // DELETE '/api/user/profile
-//Delete a user
 //TODO - build a PROTECT SHOWCASE function to make some users undeletable.
 exports.deleteUser = async (req, res, next) => {
     const { user_id } = req.user;

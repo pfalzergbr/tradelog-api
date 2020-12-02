@@ -1,12 +1,9 @@
-//Package Requires
 const express = require('express');
 const { body } = require('express-validator');
 const auth = require('../middleware/auth');
 const { checkValidation } = require('../middleware/check-Validation');
-
 //Setup Router
 const router = express.Router();
-//Require Controllers
 const userController = require('../controllers/userControllers');
 
 //------------------ LOGIN, REGISTRATION ------------

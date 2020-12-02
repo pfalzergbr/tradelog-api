@@ -7,8 +7,6 @@ const HttpError = require('../models/http-error');
 // Adds a new trade to the database
 // Looking for basic information.
 
-
-
 exports.addNewTrade = async (req, res, next) => {
     // const errors = validationResult(req);
     

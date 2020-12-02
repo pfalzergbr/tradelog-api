@@ -26,7 +26,6 @@ app.use('/api/trades', tradeRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/account', accountRoutes)
 app.use('/api/strategy', strategyRoutes)
-
 //Error handling middleware, responding to frontend.
 app.use(errorHandler);
 

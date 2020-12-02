@@ -37,7 +37,7 @@ router.post(
 
 // ------------------ PROFILE INFO UPDATE AND DELETE ----------------
 
-//Fetch a user from the database - complete
+//Fetch a user from the database - Complete
 router.get('/profile', auth, userController.getProfile);
 //Update user information
 router.patch(
@@ -47,7 +47,7 @@ router.patch(
     checkValidation,
     userController.updateUser,
 );
-//Delete a user
+//Delete a user - Complete
 router.delete('/profile', auth, userController.deleteUser);
 
 module.exports = router;

@@ -85,7 +85,7 @@ exports.updateUser = async (req, res) => {
 // DELETE '/api/user/profile
 //Delete a user
 
-//TODO - tidy up and doublecheck
+//TODO - build a PROTECT SHOWCASE function to make some users undeletable.
 exports.deleteUser = async (req, res) => {
     const { user_id } = req.user;
     try {

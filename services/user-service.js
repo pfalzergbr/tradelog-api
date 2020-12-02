@@ -1,11 +1,9 @@
 const userDb = require('../db/user-db');
 const bcrypt = require('bcrypt');
 
-
 exports.checkIsEmailRegistered = async (email) => {
     const user = await userDb.findUserByEmail(email);
-
-    if (user.length !== 0) {
+    if (user) {
         const error = new Error();
         error.message = 'E-mail already registered, please log in';
         error.code = '422';
@@ -46,4 +44,16 @@ exports.checkHashedPassword = async (password, userPassword) => {
     if (!isMatch) {
         throw new Error('Unable to login');
     }
+};
+
+
+exports.getUserProfile = async (userId) => {
+    const user = await userDb.findUserById(userId);
+    delete user.user_password;
+    return user;
+}
+
+exports.updateUserProfile = async (userId, update) => {
+    const user = await userDb.updateUserById(userId, update);
+    return user;
 }

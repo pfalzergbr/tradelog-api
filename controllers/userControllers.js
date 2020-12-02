@@ -7,7 +7,17 @@ const userService = require('../services/user-service');
 // GET '/api/user/profile'
 //Fetch a user from the database, sends the user object back for the frontend.
 
-exports.getProfile = async (req, res) => {};
+exports.getProfile = async (req, res, next) => {
+    const { user_id } = req.user;
+    
+    try {
+        const user = await userService.getUserProfile(user_id);
+        
+        res.status(200).send({user: user})
+    } catch (error) {
+        return next(error);
+    }
+};
 
 // POST '/api/user/'
 //Register a new user
@@ -19,10 +29,7 @@ exports.registerUser = async (req, res, next) => {
         await userService.checkIsEmailRegistered(email);
         userService.verifyPassword(password, verify);
         const hashedPassword = await bcrypt.hash(password, 8);
-
-        const userData = { name, email, hashedPassword };
-        const user = await userService.createUser(userData);
-
+        const user = await userService.createUser({ name, email, hashedPassword });
         const token = await generateAuthToken(user);
 
         res.status(201).send({
@@ -63,17 +70,15 @@ exports.loginUser = async (req, res) => {
 };
 
 // PATCH '/api/user/profile
-//Update user information
+// Update user information
 
 exports.updateUser = async (req, res) => {
+    const { user_id } = req.user;
+    const { name } = req.body;
+
     try {
-        //Finds the user and update based on request body, returns updated row.
-        const result = await pool.query(
-            'UPDATE users SET user_name = $1 WHERE user_id = $2 RETURNING user_id, user_name',
-            [req.body.userName, req.user.user_id],
-        );
-        const user = result.rows[0];
-        res.send(user);
+        const user = await userService.updateUserProfile(user_id, { name });
+        res.status(200).send(user);
     } catch (error) {
         res.status(400).send(error.message);
     }

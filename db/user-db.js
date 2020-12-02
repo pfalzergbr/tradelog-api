@@ -21,3 +21,25 @@ exports.insertUser = async ({email, name,  hashedPassword}) => {
         throw new Error(error.message);
     }
 }
+
+
+exports.findUserById = async (id) => {
+    const query = 'SELECT * FROM "users" WHERE user_id = $1';
+    try {
+        const result = await pool.query(query, [id])
+        return result.rows[0]
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+exports.updateUserById = async (id, update) => {
+    const { name } = update;
+    const query = 'UPDATE users SET user_name = $1 WHERE user_id = $2 RETURNING user_id, user_name';
+    try {
+        const result = await pool.query(query, [name, id])
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}

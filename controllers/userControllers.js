@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const generateAuthToken = require('../utils/generateAuthToken');
 // Require DB
 const pool = require('../db/db.js');
-const userService = require('../services/user-service')
+const userService = require('../services/user-service');
 
 // GET '/api/user/profile'
 //Fetch a user from the database, sends the user object back for the frontend.
@@ -20,59 +20,27 @@ exports.registerUser = async (req, res, next) => {
 
     try {
         await userService.checkIsEmailRegistered(email);
-    } catch (error){
-        console.log(error)
-        return next(error)
-    }
+        userService.verifyPassword(password, verify);
+        const hashedPassword = await bcrypt.hash(password, 8);
 
+        const userData = { name, email, hashedPassword };
+        const user = await userService.createUser(userData); 
 
-    
-    //Checks if password and password verification are equal.
-    if (password !== verify) {
-        return next(
-            new HttpError(
-                'Password doesn`t match with confirmation, please check.',
-                422,
-            ),
-        );
-    }
-    //Hashes the password with bcrypt
-    const hashedPassword = await bcrypt.hash(password, 8);
-    //Create a new user in the database, based on the recieved input.
-    let user;
-    try {
-        const result = await pool.query(
-            'INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING user_id, user_name, user_email',
-            [name, email, hashedPassword],
-        );
-        user = {
-            ...result.rows[0],
-        };
-        console.log(user);
-    } catch (error) {
-        return next(
-            new HttpError(
-                'Cannot create new user. Please try again later',
-                500,
-            ),
-        );
-    }
-    //Create a new JWT token, and saves the user into the database. Returns a user object with a name
-    //and Id, and the token for the front-end.
-    try {
         const token = await generateAuthToken(user);
 
         res.status(201).send({
             user: {
                 userId: user.user_id,
                 userName: user.user_name,
-                // accounts: user_accounts,
+                accounts: [],
             },
             token,
         });
+
     } catch (error) {
-        res.status(400).send(error.message);
+        return next(error);
     }
+
 };
 
 // POST '/api/user/login'

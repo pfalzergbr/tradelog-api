@@ -11,3 +11,17 @@ exports.checkIsEmailRegistered = async (email) => {
             throw new Error(error.message);
         }
 };
+
+exports.verifyPassword = (password, verify) => {
+    if (password !== verify) {
+        const error = new Error();
+        error.message = 'Password and re-type password don`t match. Please Try again';
+        error.code = '422';
+        throw new Error(error.message);
+    }
+}
+
+exports.createUser = async (userData) => {
+    const user = await userDb.insertUser(userData);
+    return user;
+}

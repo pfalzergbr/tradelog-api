@@ -27,3 +27,21 @@ exports.findStrategyById = async (userId, strategyId) => {
         throw new Error(error.message);
     }
 };
+
+exports.updateStrategyById = async (userId, updatedData) => {
+    const query =
+        'UPDATE strategies SET strategy_name = $1, description = $2 WHERE strategy_id = $3 AND user_id = $4 RETURNING *';
+    const { strategy_id, strategy_name, description } = updatedData;
+
+    try {
+        const result = await pool.query(query, [
+            strategy_name,
+            description,
+            strategy_id,
+            userId,
+        ]);
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

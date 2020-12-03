@@ -17,3 +17,16 @@ exports.getOneStrategy = async (userId, strategyId) => {
 
     return strategy;
 };
+
+
+exports.updateStrategy = async (userId, updatedData) => {
+    const updatedStrategy = await strategyDb.updateStrategyById(userId, updatedData);
+
+        if (!updatedStrategy) {
+            const error = new Error();
+            error.message = 'Cannot update. Strategy not found';                
+            error.code = '404';
+            throw new Error(error.message);
+        }
+        return updatedStrategy;
+}

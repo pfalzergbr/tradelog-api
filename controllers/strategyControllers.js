@@ -43,7 +43,17 @@ exports.getStrategy = async (req, res, next) => {
 // Update a strategy
 // @PATCH /api/strategy/:strategyId
 exports.updateStrategy = async (req, res, next) => {
+    const { user_id } = req.user;
+    const { strategyId: strategy_id } = req.params;
+    const { strategyName: strategy_name, description } = req.body;
+
     try {
+        const updatedStrategy = await strategyService.updateStrategy(user_id, {
+            strategy_id,
+            strategy_name,
+            description,
+        });
+        res.status(200).send({message: 'Strategy updated', updatedStrategy});
     } catch (error) {
         return next(error);
     }

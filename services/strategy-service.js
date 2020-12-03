@@ -48,3 +48,13 @@ exports.deleteStrategy = async (strategy_id, user_id) => {
     }
     return deletedStrategy;
 };
+
+exports.getUserStrategies = async (userId) => {
+    const strategies = await strategyDb.findStrategyByUserId(userId);
+    return strategies;
+};
+
+exports.getAccountStrategies = async (userId, account_id) => {
+    const strategies = await strategyDb.findStrategyByUserId(userId);
+    return strategies.filter(strategy => strategy.account_id === account_id);
+};

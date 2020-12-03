@@ -57,3 +57,14 @@ exports.deleteStrategyById = async (strategy_id, user_id) => {
         throw new Error(error.message);
     }
 };
+
+exports.findStrategyByUserId = async (userId) => {
+    const query = 'SELECT * FROM strategies WHERE user_id = $1';
+
+    try {
+        const result = await pool.query(query, [userId]);
+        return result.rows;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

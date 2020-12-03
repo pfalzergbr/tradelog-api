@@ -83,21 +83,33 @@ exports.deleteStrategy = async (req, res, next) => {
     }
 };
 
-// Get all strategies by user ID
-// @GET /api/strategy/list
 
-exports.getUserStrategies = async (req, res, next) => {
-    try {
-    } catch (error) {
-        return next(error);
-    }
-};
 // Get all strategies by account ID
-// @GET /api/strategy/list/:accountId
+// @GET /api/strategy/account/:accountId
 
 exports.getAccountStrategies = async (req, res, next) => {
+    const { user_id } = req.user;
+    const { accountId: account_id } = req.params
+
     try {
+        const strategies = await strategyService.getAccountStrategies(user_id, account_id);
+        res.status(200).send({ strategies });
     } catch (error) {
         return next(error);
     }
 };
+
+// Get all strategies by user ID
+// @GET /api/strategy/user/
+
+exports.getUserStrategies = async (req, res, next) => {
+    const { user_id } = req.user;
+
+    try {
+        const strategies = await strategyService.getUserStrategies(user_id);
+        res.status(200).send({ strategies });
+    } catch (error) {
+        return next(error);
+    }
+};
+

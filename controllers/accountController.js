@@ -29,6 +29,7 @@ exports.getAccounts = async (req, res, next) => {
         return next(error);
     }
 };
+
 // GET '/api/user/account/:id
 exports.getSingleAccount = async (req, res, next) => {
     const { user_id } = req.user;

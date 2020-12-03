@@ -18,15 +18,33 @@ exports.getOneStrategy = async (userId, strategyId) => {
     return strategy;
 };
 
-
 exports.updateStrategy = async (userId, updatedData) => {
-    const updatedStrategy = await strategyDb.updateStrategyById(userId, updatedData);
+    const updatedStrategy = await strategyDb.updateStrategyById(
+        userId,
+        updatedData,
+    );
 
-        if (!updatedStrategy) {
-            const error = new Error();
-            error.message = 'Cannot update. Strategy not found';                
-            error.code = '404';
-            throw new Error(error.message);
-        }
-        return updatedStrategy;
-}
+    if (!updatedStrategy) {
+        const error = new Error();
+        error.message = 'Cannot update. Strategy not found';
+        error.code = '404';
+        throw new Error(error.message);
+    }
+
+    return updatedStrategy;
+};
+
+exports.deleteStrategy = async (strategy_id, user_id) => {
+    const deletedStrategy = await strategyDb.deleteStrategyById(
+        strategy_id,
+        user_id,
+    );
+
+    if (!deletedStrategy) {
+        const error = new Error();
+        error.message = 'Cannot delete. Strategy not found';
+        error.code = '404';
+        throw new Error(error.message);
+    }
+    return deletedStrategy;
+};

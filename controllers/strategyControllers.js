@@ -5,6 +5,7 @@ const strategyService = require('../services/strategy-service');
 
 // Create new Strategy
 // @POST /api/strategy/
+
 exports.createStrategy = async (req, res, next) => {
     const { user_id } = req.user;
     const {
@@ -25,6 +26,7 @@ exports.createStrategy = async (req, res, next) => {
         return next(error);
     }
 };
+
 // Get one strategy
 // @GET /api/strategy/:strategyId
 
@@ -33,7 +35,10 @@ exports.getStrategy = async (req, res, next) => {
     const { strategyId: strategy_id } = req.params;
 
     try {
-        const strategy = await strategyService.getOneStrategy(user_id, strategy_id);
+        const strategy = await strategyService.getOneStrategy(
+            user_id,
+            strategy_id,
+        );
         res.status(200).send(strategy);
     } catch (error) {
         return next(error);
@@ -42,6 +47,7 @@ exports.getStrategy = async (req, res, next) => {
 
 // Update a strategy
 // @PATCH /api/strategy/:strategyId
+
 exports.updateStrategy = async (req, res, next) => {
     const { user_id } = req.user;
     const { strategyId: strategy_id } = req.params;
@@ -53,21 +59,33 @@ exports.updateStrategy = async (req, res, next) => {
             strategy_name,
             description,
         });
-        res.status(200).send({message: 'Strategy updated', updatedStrategy});
+        res.status(200).send({ message: 'Strategy updated', updatedStrategy });
     } catch (error) {
         return next(error);
     }
 };
+
 // Delete a strategy
 // @DELETE /api/strategy/:strategyId
+
 exports.deleteStrategy = async (req, res, next) => {
+    const { strategyId: strategy_id } = req.params;
+    const { user_id } = req.user;
+
     try {
+        const deletedStrategy = await strategyService.deleteStrategy(
+            strategy_id,
+            user_id,
+        );
+        res.status(200).send({ message: 'Strategy deleted', deletedStrategy });
     } catch (error) {
         return next(error);
     }
 };
+
 // Get all strategies by user ID
 // @GET /api/strategy/list
+
 exports.getUserStrategies = async (req, res, next) => {
     try {
     } catch (error) {
@@ -76,6 +94,7 @@ exports.getUserStrategies = async (req, res, next) => {
 };
 // Get all strategies by account ID
 // @GET /api/strategy/list/:accountId
+
 exports.getAccountStrategies = async (req, res, next) => {
     try {
     } catch (error) {

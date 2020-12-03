@@ -45,3 +45,15 @@ exports.updateStrategyById = async (userId, updatedData) => {
         throw new Error(error.message);
     }
 };
+
+exports.deleteStrategyById = async (strategy_id, user_id) => {
+    const query =
+        'DELETE FROM strategies WHERE strategy_id = $1 AND user_id = $2 RETURNING account_id';
+
+    try {
+        const result = await pool.query(query, [strategy_id, user_id]);
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

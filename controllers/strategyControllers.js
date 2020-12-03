@@ -27,8 +27,14 @@ exports.createStrategy = async (req, res, next) => {
 };
 // Get one strategy
 // @GET /api/strategy/:strategyId
+
 exports.getStrategy = async (req, res, next) => {
+    const { user_id } = req.user;
+    const { strategyId: strategy_id } = req.params;
+
     try {
+        const strategy = await strategyService.getOneStrategy(user_id, strategy_id);
+        res.status(200).send(strategy);
     } catch (error) {
         return next(error);
     }

@@ -28,7 +28,6 @@ CREATE TABLE strategies (
     strategy_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     strategy_name VARCHAR(255) NOT NULL,
     description TEXT,
-    --pnl?
     user_id uuid NOT NULL,
     account_id uuid NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(), 

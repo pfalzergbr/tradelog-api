@@ -37,7 +37,7 @@ CREATE TABLE strategies (
 
 -- Create Enums for trades
 
-CREATE TYPE outcome_type AS ENUM ('loss', 'breakeven', 'profit', );
+CREATE TYPE outcome_type AS ENUM ('loss', 'breakeven', 'profit');
 CREATE TYPE bias_type AS ENUM ('bearish', 'neutral', 'bullish');
 
 -- Create Trades Table
@@ -52,10 +52,10 @@ CREATE TABLE trades (
     date TIMESTAMP NOT NULL DEFAULT NOW(),
     notes TEXT,
     user_id uuid NOT NULL,
-    account_id uuid NOT NULL,,
-    strategy_id uuid NOT NULL,,
+    account_id uuid NOT NULL,
+    strategy_id uuid NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (account_id) REFERENCES accounts (account_id) ON DELETE CASCADE,
     FOREIGN KEY (strategy_id) REFERENCES strategies (strategy_id) ON DELETE CASCADE
-)
+);

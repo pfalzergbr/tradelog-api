@@ -1,65 +1,19 @@
-const { validationResult } = require('express-validator');
-
-//require Models
-const HttpError = require('../models/http-error');
-
+const tradeService = require('../services/trade-service');
 // POST /api/trades/
-// Adds a new trade to the database
-// Looking for basic information.
+// Adds a new trade to the database TODO - ADD DATE HANDLING
 
 exports.addNewTrade = async (req, res, next) => {
-    // const errors = validationResult(req);
-    
-    // if (!errors.isEmpty()) {
-    //     return next(
-    //         new HttpError('Invalid inputs passed, please check your data', 422),
-    //     );
-    // }
+    const { user_id } = req.user;
+    const newTradeData = {...req.body, user_id}
 
-    // // Grab trader an account id from the body
-    // const userId = req.body.trader;
-    // const accountId = req.body.account;
+    const newTrade = tradeService.formatTrade(newTradeData);
 
-    // //Create new trade object with reference to the trader.
-    // const trade = new Trade({
-    //     ...req.body,
-    //     trader: req.user._id,
-    // });
-
-    // //Tidy up the incoming data. Convert symbol to uppercase.
-    // trade.symbol = trade.symbol.toUpperCase();
-    // //Swapping the amount for a negative value if the outcome is a loss.
-    // if (trade.outcome === 'loss' && trade.amount > 0) {
-    //     trade.amount = -trade.amount;
-    // }
-
-    // try {
-    //     //Find user an the account separately, to get ready for the write
-    //     let user = await User.findOne({ _id: userId });
-    //     let account = await Account.findOne({ _id: accountId });
-
-    //     //Start a new session to sync up three models. TODO - Swap the SQL, not elegant at all
-    //     const session = await mongoose.startSession();
-    //     session.startTransaction();
-
-    //     //Push the new trade on the trades array, on both account and user. Not efficient, needs refactoring.
-    //     account.trades.push(trade);
-    //     user.trades.push(trade);
-        
-
-
-    //     //Save all three changes, as part of the session
-    //     await account.save({ session });
-    //     await user.save({ session });
-    //     await trade.save({ session });
-    //     //Close the transaction
-    //     await session.commitTransaction();
-
-    //     res.status(201).send(trade);
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(422).send(error.message);
-    // }
+    try {
+        const trade = await tradeService.createNewTrade(newTrade);
+        res.status(200).send({ message: "New trade created", trade});
+    } catch (error) {
+        return next(error);
+    }
 };
 
 // GET '/api/trades/'
@@ -96,6 +50,9 @@ exports.getTradesByAccount = async (req, res, next) => {
     // } catch (error) {
     //     res.status(400).send(error.message);
     // }
+};
+exports.getTradesByStrategy = async (req, res, next) => {
+
 };
 
 

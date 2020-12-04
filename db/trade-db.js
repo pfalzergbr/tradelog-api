@@ -28,3 +28,15 @@ exports.insertNewTrade = async (tradeData) => {
         throw new Error(error.message);
     }
 };
+
+
+exports.findTradeByUserId = async (userId) => {
+    const query =
+        'SELECT * FROM trades WHERE user_id = $1';
+    try {
+        const result = await pool.query(query, [ userId]);
+        return result.rows;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

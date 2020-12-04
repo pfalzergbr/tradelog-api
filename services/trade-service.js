@@ -16,3 +16,8 @@ exports.createNewTrade = async (tradeData) => {
     const trade = await tradeDb.insertNewTrade(tradeData);
     return trade; 
 }
+
+exports.getUserTrades = async (userId) => {
+    const trades = await tradeDb.findTradeByUserId(userId);
+    return trades;
+};

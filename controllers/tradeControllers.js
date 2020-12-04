@@ -19,16 +19,15 @@ exports.addNewTrade = async (req, res, next) => {
 // GET '/api/trades/'
 //Fetches all trades from the database
 
-exports.getAllTrades = async (req, res) => {
-    // try {
-    //     const trades = await Trade.find({ trader: req.user._id });
-    //     res.send(trades);
-    //     // Version B with populate
-    //     // await req.user.populate('trades').execPopulate()
-    //     // res.send(req.user.trades)
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
+exports.getTradesByUser = async (req, res, next) => {
+    const { user_id } = req.user;
+
+    try {
+        const trades = await tradeService.getUserTrades(user_id);
+        res.status(200).send({ trades });
+    } catch (error) {
+        return next(error);
+    }
 };
 
 

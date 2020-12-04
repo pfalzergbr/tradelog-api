@@ -35,7 +35,7 @@ router.get('/account/:accountId', auth, tradeController.getTradesByAccount);
 router.get('/strategy/:strategyId', auth /*tradeController.getTradesByStrategy*/)
 
 //Fetch one trade from the database
-router.get('/', auth, tradeController.getAllTrades);
+router.get('/', auth, tradeController.getTradesByUser);
 //Fetch one trade from the database
 router.get('/:id', auth, tradeController.getTrade);
 //Update a trade in the database - TODO: ADD VALIDATION

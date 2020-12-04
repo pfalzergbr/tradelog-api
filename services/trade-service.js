@@ -11,13 +11,22 @@ exports.formatTrade = (tradeData) => {
     return trade;
 };
 
-
 exports.createNewTrade = async (tradeData) => {
     const trade = await tradeDb.insertNewTrade(tradeData);
-    return trade; 
-}
+    return trade;
+};
 
 exports.getUserTrades = async (userId) => {
     const trades = await tradeDb.findTradeByUserId(userId);
+    return trades;
+};
+
+exports.getAccountTrades = async (userId, accountId) => {
+    const trades = await tradeDb.findTradeByAccountId(userId, accountId);
+    return trades;
+};
+
+exports.getStrategyTrades = async (userId, strategyId) => {
+    const trades = await tradeDb.findTradeByStrategyId(userId, strategyId);
     return trades;
 };

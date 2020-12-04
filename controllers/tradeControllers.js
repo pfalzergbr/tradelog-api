@@ -32,26 +32,32 @@ exports.getTradesByUser = async (req, res, next) => {
 
 
 // GET '/api/trades/account/:accountId'
-//Fetches all trades from the database
+//Fetches all trades by account Id
 
 
 exports.getTradesByAccount = async (req, res, next) => {
-    // //Grab accountId from params
-    // const accountId = req.params.accountId
-    // // Checks if the account actually belongs to the trader
-    // if (!req.user.accounts.includes(accountId)){
-    //     return next( new HttpError('You are not authorized to see these trades. Please log in.', 401))
-    // }
-    // //TODO - Add extra security, check if only the owner can access all trades.
-    // try {
-    //     const trades = await Trade.find({ account: accountId});
-    //     res.status(200).send(trades);
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
-};
-exports.getTradesByStrategy = async (req, res, next) => {
+    const { user_id } = req.user
+    const { accountId : account_id } = req.params
 
+    try {
+        const trades = await tradeService.getAccountTrades(user_id, account_id)
+        res.status(200).send(trades);
+    } catch (error) {
+        return next(error);
+    }
+};
+
+
+exports.getTradesByStrategy = async (req, res, next) => {
+    const { user_id } = req.user
+    const { strategyId : strategy_id } = req.params
+
+    try {
+        const trades = await tradeService.getStrategyTrades(user_id, strategy_id)
+        res.status(200).send(trades);
+    } catch (error) {
+        return next(error);
+    }
 };
 
 

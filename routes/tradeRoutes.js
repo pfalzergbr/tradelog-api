@@ -31,16 +31,18 @@ router.post(
 router.get('/account/:accountId', auth, tradeController.getTradesByAccount);
 
 //Fetch all trades by strategy
-//TODO!!!
-router.get('/strategy/:strategyId', auth, tradeController.getTradesByStrategy)
+router.get('/strategy/:strategyId', auth, tradeController.getTradesByStrategy);
 
 //Fetch one trade from the database
 router.get('/', auth, tradeController.getTradesByUser);
 //Fetch one trade from the database
-router.get('/:id', auth, tradeController.getTrade);
+router.get('/:tradeId', auth, tradeController.getTrade);
+
 //Update a trade in the database - TODO: ADD VALIDATION
-router.patch('/:id', auth, tradeController.updateTrade);
+// ADD VALIDATION
+router.patch('/tradeId', auth, tradeController.updateTrade);
+
 //Delete a trade in the database -- TO WORK ON
-router.delete('/:id', auth, tradeController.deleteTrade);
+router.delete('/:tradeId', auth, tradeController.deleteTrade);
 
 module.exports = router;

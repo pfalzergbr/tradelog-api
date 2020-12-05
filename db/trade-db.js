@@ -60,3 +60,44 @@ exports.findTradeByStrategyId = async (userId, strategyId) => {
         throw new Error(error.message);
     }
 };
+
+exports.findTradeById = async (userId, tradeId) => {
+    const query =
+        'SELECT * FROM trades WHERE trade_id = $1 AND user_id = $2';
+    try {
+        const result = await pool.query(query, [tradeId, userId]);
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+//TODO - FINISH UPDATE TRADE
+exports.updateTradeById = async (userId, updatedData) => {
+    const query =''
+        // 'UPDATE trades SET trade_name = $1, description = $2 WHERE strategy_id = $3 AND user_id = $4 RETURNING *';
+    const { trade_id } = updatedData;
+
+    try {
+        const result = await pool.query(query, [
+            trade_id,
+            userId,
+        ]);
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
+exports.deleteTradeById = async (trade_id, user_id) => {
+    const query =
+        'DELETE FROM trades WHERE trade_id = $1 AND user_id = $2 RETURNING account_id';
+
+    try {
+        const result = await pool.query(query, [trade_id, user_id]);
+        return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

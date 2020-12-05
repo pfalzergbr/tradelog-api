@@ -4,13 +4,13 @@ const tradeService = require('../services/trade-service');
 
 exports.addNewTrade = async (req, res, next) => {
     const { user_id } = req.user;
-    const newTradeData = {...req.body, user_id}
+    const newTradeData = { ...req.body, user_id };
 
     const newTrade = tradeService.formatTrade(newTradeData);
 
     try {
         const trade = await tradeService.createNewTrade(newTrade);
-        res.status(200).send({ message: "New trade created", trade});
+        res.status(200).send({ message: 'New trade created', trade });
     } catch (error) {
         return next(error);
     }
@@ -30,105 +30,80 @@ exports.getTradesByUser = async (req, res, next) => {
     }
 };
 
-
 // GET '/api/trades/account/:accountId'
 //Fetches all trades by account Id
 
-
 exports.getTradesByAccount = async (req, res, next) => {
-    const { user_id } = req.user
-    const { accountId : account_id } = req.params
+    const { user_id } = req.user;
+    const { accountId: account_id } = req.params;
 
     try {
-        const trades = await tradeService.getAccountTrades(user_id, account_id)
+        const trades = await tradeService.getAccountTrades(user_id, account_id);
         res.status(200).send(trades);
     } catch (error) {
         return next(error);
     }
 };
-
 
 exports.getTradesByStrategy = async (req, res, next) => {
-    const { user_id } = req.user
-    const { strategyId : strategy_id } = req.params
+    const { user_id } = req.user;
+    const { strategyId: strategy_id } = req.params;
 
     try {
-        const trades = await tradeService.getStrategyTrades(user_id, strategy_id)
+        const trades = await tradeService.getStrategyTrades(
+            user_id,
+            strategy_id,
+        );
         res.status(200).send(trades);
     } catch (error) {
         return next(error);
     }
 };
-
 
 // GET /api/trades/:id
 //Fetches one trade from the database by Id
 
-exports.getTrade = async (req, res) => {
-    // const _id = req.params.id;
-    // try {
-    //     const trade = await Trade.findOne({ _id, trader: req.user._id });
-    //     if (!trade) {
-    //         return res.status(404).send('Trade not found');
-    //     }
-    //     res.send(trade);
-    // } catch (error) {
-    //     res.status(500).send(error.message);
-    // }
+exports.getTrade = async (req, res, next) => {
+    const { tradeId: trade_id } = req.params;
+    const { user_id } = req.user;
+    try {
+        const trade = await tradeService.getTradeById(user_id, trade_id);
+        res.send(trade);
+    } catch (error) {
+        return next(error);
+    }
 };
-
-
 
 //Update a trade in the database
-exports.updateTrade = async (req, res) => {
-    // const errors = validationResult(req);
+exports.updateTrade = async (req, res, next) => {
+    const { tradeId: trade_id } = req.params;
+    const { user_id } = req.user;
+    const updates = { ...req.body, user_id };
 
-    // if (!errors.isEmpty()) {
-    //     return next(
-    //         new HttpError('Invalid inputs passed, please check your data', 422),
-    //     );
-    // }
-
-    // const _id = req.params.id;
-    // try {
-    //     const trade = await Trade.findOneAndUpdate(
-    //         { _id, trader: req.user._id },
-    //         req.body,
-    //     );
-    //     const newTrade = await Trade.findOne({ _id });
-    //     res.send(newTrade);
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
+    try {
+        const updatedTrade = await tradeService.updateTrade(
+            trade_id,
+            user_id,
+            updates,
+        );
+        res.status(200).send(updatedTrade);
+    } catch (error) {
+        return next(error);
+    }
 };
 
-
 //Delete a trade from the database
-exports.deleteTrade = async (req, res) => {
-    // const _id = req.params.id;
+exports.deleteTrade = async (req, res, next) => {
+    const { tradeId: trade_id } = req.params;
+    const { user_id } = req.user;
 
-    // try {
-    //     //Start a new session for removing all references to the trade
-    //     const session = await mongoose.startSession()
-    //     session.startTransaction();
-    //     const trade = await Trade.findOneAndRemove({
-    //         _id,
-    //         trader: req.user._id,
-    //     }, { session });
-    //     //Find the account and user associated with the trade
-    //     const account = await Account.findOne({ _id: trade.account});
-    //     const user = await User.findOne({ _id: req.user._id});
-    //     //Pull out the trade references from the account and user documents
-    //     account.trades.pull(trade);
-    //     user.trades.pull(trade);
-    //     //Save changes
-    //     await account.save({ session })
-    //     await user.save({ session });
-    //     ///close and commit the transaction
-    //     await session.commitTransaction();
-
-    //     res.send(trade);
-    // } catch (error) {
-    //     res.status(400).send(error.message);
-    // }
+    try {
+        const deletedTrade = await tradeService.deleteTrade(
+            strategy_id,
+            user_id,
+        );
+        res.status(200).send({ message: 'Trade deleted', deletedTrade });
+    } catch (error) {
+        return next(error);
+    }
 };

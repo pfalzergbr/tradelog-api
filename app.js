@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 //Enviromental Variables
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 //Login URLs
 
@@ -24,8 +24,8 @@ app.use(cors());
 //Routers
 app.use('/api/trades', tradeRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/account', accountRoutes)
-app.use('/api/strategy', strategyRoutes)
+app.use('/api/account', accountRoutes);
+app.use('/api/strategy', strategyRoutes);
 //Error handling middleware, responding to frontend.
 app.use(errorHandler);
 

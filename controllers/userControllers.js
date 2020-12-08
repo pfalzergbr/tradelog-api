@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const generateAuthToken = require('../utils/generateAuthToken');
 const userService = require('../services/user-service');
+const accountService = require('../services/account-service')
 
 // GET '/api/user/profile'
 exports.getProfile = async (req, res, next) => {
@@ -51,6 +52,7 @@ exports.loginUser = async (req, res, next) => {
         const user = await userService.checkLoginEmail(email);
         await userService.checkHashedPassword(password, user.user_password);
         const token = await generateAuthToken(user);
+        const accounts = await accountService.getAccounts(user.user_id)
 
         // const accountsField = user.accounts.map(account => { return {_id: account._id, accountName: account.accountName} })
         res.status(200).send({
@@ -58,7 +60,9 @@ exports.loginUser = async (req, res, next) => {
                 userId: user.user_id,
                 userName: user.user_name /*accounts: accountsField*/,
             },
+            accounts: accounts,
             token,
+            
         });
     } catch (error) {
         return next(error);

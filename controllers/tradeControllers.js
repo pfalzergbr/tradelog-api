@@ -1,6 +1,6 @@
 const tradeService = require('../services/trade-service');
-// POST /api/trades/
 // Adds a new trade to the database TODO - ADD DATE HANDLING
+// @POST /api/trades/
 
 exports.addNewTrade = async (req, res, next) => {
     const { user_id } = req.user;
@@ -16,8 +16,8 @@ exports.addNewTrade = async (req, res, next) => {
     }
 };
 
-// GET '/api/trades/'
-//Fetches all trades from the database
+// Fetches all trades from the database
+// @GET '/api/trades/'
 
 exports.getTradesByUser = async (req, res, next) => {
     const { user_id } = req.user;
@@ -30,8 +30,8 @@ exports.getTradesByUser = async (req, res, next) => {
     }
 };
 
-// GET '/api/trades/account/:accountId'
-//Fetches all trades by account Id
+// @GET '/api/trades/account/:accountId'
+// Fetches all trades by account Id
 
 exports.getTradesByAccount = async (req, res, next) => {
     const { user_id } = req.user;
@@ -44,6 +44,9 @@ exports.getTradesByAccount = async (req, res, next) => {
         return next(error);
     }
 };
+
+// @GET 'api/trades/strategy/:strategyID
+// Get all trades by strategy
 
 exports.getTradesByStrategy = async (req, res, next) => {
     const { user_id } = req.user;
@@ -60,7 +63,7 @@ exports.getTradesByStrategy = async (req, res, next) => {
     }
 };
 
-// GET /api/trades/:id
+// @GET /api/trades/:id
 //Fetches one trade from the database by Id
 
 exports.getTrade = async (req, res, next) => {
@@ -75,6 +78,8 @@ exports.getTrade = async (req, res, next) => {
 };
 
 //Update a trade in the database
+// @PATCH
+
 exports.updateTrade = async (req, res, next) => {
     const { tradeId: trade_id } = req.params;
     const { user_id } = req.user;
@@ -93,15 +98,14 @@ exports.updateTrade = async (req, res, next) => {
 };
 
 //Delete a trade from the database
+// @DELETE
+
 exports.deleteTrade = async (req, res, next) => {
     const { tradeId: trade_id } = req.params;
     const { user_id } = req.user;
 
     try {
-        const deletedTrade = await tradeService.deleteTrade(
-            strategy_id,
-            user_id,
-        );
+        const deletedTrade = await tradeService.deleteTrade(trade_id, user_id);
         res.status(200).send({ message: 'Trade deleted', deletedTrade });
     } catch (error) {
         return next(error);

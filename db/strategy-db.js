@@ -48,7 +48,7 @@ exports.updateStrategyById = async (userId, updatedData) => {
 
 exports.deleteStrategyById = async (strategy_id, user_id) => {
     const query =
-        'DELETE FROM strategies WHERE strategy_id = $1 AND user_id = $2 RETURNING account_id';
+        'DELETE FROM strategies WHERE strategy_id = $1 AND user_id = $2 RETURNING strategy_id';
 
     try {
         const result = await pool.query(query, [strategy_id, user_id]);

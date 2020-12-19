@@ -5,6 +5,7 @@ const { body } = require('express-validator');
 //Require Middlewares
 const tradeController = require('../controllers/tradeControllers');
 const auth = require('../middleware/auth');
+const { checkValidation } = require('../middleware/check-Validation');
 
 //Setup Router
 const router = express.Router();
@@ -18,12 +19,12 @@ router.post(
         body('outcome').not().isEmpty().isIn(['breakeven', 'profit', 'loss']),
         body('bias').not().isEmpty().isIn(['bullish', 'bearish']),
         body('amount').not().isEmpty().isFloat(),
-        body('trader').not().isEmpty().isString(),
         body('account').not().isEmpty().isString(),
+        body('strategy').not().isEmpty().isString(),
         body('notes').isString(),
         // body('date').isDate()
         //Todo: ADD date validation
-    ],
+    ], checkValidation,
     tradeController.addNewTrade,
 );
 

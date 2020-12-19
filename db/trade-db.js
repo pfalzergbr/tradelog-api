@@ -7,8 +7,8 @@ exports.insertNewTrade = async (tradeData) => {
         amount,
         bias,
         notes,
-        accountId: account_id,
-        strategyId: strategy_id,
+        account: account_id,
+        strategy: strategy_id,
         user_id,
     } = tradeData;
     const query =

@@ -11,8 +11,6 @@ const auth = async (req, res, next) => {
         const token = req.header('Authorization').replace('Bearer ', '');
         const decoded = jwt.verify(token, jwtSecret);
 
-        // TODO - REMAKE FROM MONGOOSE TO POSTGRES
-
         const result = await pool.query(
             'SELECT user_id, user_name, user_email FROM users WHERE user_id = $1',
             [decoded.user_id],

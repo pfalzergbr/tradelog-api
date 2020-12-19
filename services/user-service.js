@@ -1,4 +1,6 @@
 const userDb = require('../db/user-db');
+const strategyDb = require('../db/strategy-db');
+const accountDb = require('../db/account-db');
 const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async (email) => {
@@ -51,14 +53,22 @@ exports.getUserProfile = async (userId) => {
     const user = await userDb.findUserById(userId);
     delete user.user_password;
     return user;
-}
+};
+
+//Refactor for more effective SQL query
+exports.getUserData = async (userId) => {
+    const accounts = await accountDb.findAccountsByUserId(userId);
+    const strategies = await strategyDb.findStrategyByUserId(userId);
+    return { accounts, strategies };
+};
+
 //TODO - Add error handling
 exports.updateUserProfile = async (userId, update) => {
     const user = await userDb.updateUserById(userId, update);
     return user;
-}
+};
 //TODO - Add error handling
 exports.deleteUser = async (userId) => {
     const user = await userDb.deleteUserById(userId);
     return user;
-}
+};

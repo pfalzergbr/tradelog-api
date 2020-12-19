@@ -36,6 +36,8 @@ router.post(
 
 //Fetch a user from the database - Complete
 router.get('/profile', auth, userController.getProfile);
+
+router.get('/userdata', auth, userController.getUserData);
 //Update user information
 router.patch(
     '/profile',

@@ -16,6 +16,7 @@ CREATE TABLE accounts (
     account_name VARCHAR(255) NOT NULL,
     description TEXT,
     balance DECIMAL(12,2) NOT NULL DEFAULT 0,
+    opening_balance DECIMAL(12,2) NOT NULL DEFAULT 0,
     user_id uuid NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(), 
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE

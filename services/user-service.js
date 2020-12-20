@@ -1,6 +1,7 @@
 const userDb = require('../db/user-db');
 const strategyDb = require('../db/strategy-db');
 const accountDb = require('../db/account-db');
+const tradeDb = require('../db/trade-db');
 const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async (email) => {

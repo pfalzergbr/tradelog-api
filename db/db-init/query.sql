@@ -27,8 +27,8 @@ SELECT
     count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
     count(*) AS "num_of_trades" 
 FROM trades
---WHERE user_id = $1
 JOIN accounts ON trades.account_id = accounts.account_id
+WHERE trades.user_id = '6221a50c-da34-4966-bac9-32460c9ab814'
 GROUP BY accounts.account_id;
 
 
@@ -44,6 +44,6 @@ SELECT
     count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
     count(*) AS "num_of_trades" 
 FROM trades
---WHERE user_id = $1 AND account_id = $2 AND 
 JOIN strategies ON trades.strategy_id = strategies.strategy_id
+WHERE trades.user_id = '6221a50c-da34-4966-bac9-32460c9ab814' AND trades.account_id = 'UUID'
 GROUP BY strategies.strategy_id;

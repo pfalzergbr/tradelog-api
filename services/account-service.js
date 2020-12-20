@@ -1,4 +1,5 @@
 const accountDb = require('../db/account-db');
+const tradeDb = require('../db/trade-db');
 
 exports.createNewAccount = async (userId, accountData) => {
     const account = await accountDb.insertNewAccount(userId, accountData);
@@ -15,7 +16,7 @@ exports.getOneAccount = async (userId, accountId) => {
 
     if (!account) {
         const error = new Error();
-        error.message = 'Account not found';                
+        error.message = 'Account not found';
         error.code = '404';
         throw new Error(error.message);
     }
@@ -24,25 +25,36 @@ exports.getOneAccount = async (userId, accountId) => {
 };
 
 exports.updateAccount = async (userId, updatedData) => {
-    const updatedAccount = await accountDb.updateAccountById(userId, updatedData);
+    const updatedAccount = await accountDb.updateAccountById(
+        userId,
+        updatedData,
+    );
 
-        if (!updatedAccount) {
-            const error = new Error();
-            error.message = 'Cannot update. Account not found';                
-            error.code = '404';
-            throw new Error(error.message);
-        }
-        return updatedAccount;
-}
+    if (!updatedAccount) {
+        const error = new Error();
+        error.message = 'Cannot update. Account not found';
+        error.code = '404';
+        throw new Error(error.message);
+    }
+    return updatedAccount;
+};
 
 exports.deleteAccount = async (account_id, user_id) => {
-    const deletedAccount = await accountDb.deleteAccountById(account_id, user_id);
-    
+    const deletedAccount = await accountDb.deleteAccountById(
+        account_id,
+        user_id,
+    );
+
     if (!deletedAccount) {
         const error = new Error();
-        error.message = 'Cannot delete. Account not found';                
+        error.message = 'Cannot delete. Account not found';
         error.code = '404';
         throw new Error(error.message);
     }
     return deletedAccount;
-}
+};
+
+exports.getAccountStats = async (userId) => {
+    const accountStats = await tradeDb.getTradeStatsByAccount(userId);
+    return accountStats;
+};

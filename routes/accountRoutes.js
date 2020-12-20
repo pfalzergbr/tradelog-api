@@ -19,8 +19,10 @@ router.post(
     ], checkValidation,
     accountController.createAccount,
 );
+//Get stats by account
+router.get('/stats', auth, accountController.getAccountStats);
 //Get a single trading account.
-router.get('/:accountId', auth, accountController.getSingleAccount);
+router.get('/single/:accountId', auth, accountController.getSingleAccount);
 //Update a single trading account
 router.patch(
     '/:accountId',

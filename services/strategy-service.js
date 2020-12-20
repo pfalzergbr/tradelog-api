@@ -1,4 +1,5 @@
 const strategyDb = require('../db/strategy-db');
+const tradeDb = require('../db/trade-db');
 
 exports.newStrategy = async (userId, strategyData) => {
     const strategy = strategyDb.insertNewStrategy(userId, strategyData);
@@ -57,4 +58,11 @@ exports.getUserStrategies = async (userId) => {
 exports.getAccountStrategies = async (userId, account_id) => {
     const strategies = await strategyDb.findStrategyByUserId(userId);
     return strategies.filter(strategy => strategy.account_id === account_id);
+};
+
+
+
+exports.getStrategyStats = async (userId, accountId) => {
+    const strategyStats = await tradeDb.getTradeStatsByAccount(userId, accountId);
+    return strategyStats;
 };

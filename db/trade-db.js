@@ -62,8 +62,7 @@ exports.findTradeByStrategyId = async (userId, strategyId) => {
 };
 
 exports.findTradeById = async (userId, tradeId) => {
-    const query =
-        'SELECT * FROM trades WHERE trade_id = $1 AND user_id = $2';
+    const query = 'SELECT * FROM trades WHERE trade_id = $1 AND user_id = $2';
     try {
         const result = await pool.query(query, [tradeId, userId]);
         return result.rows[0];
@@ -74,21 +73,17 @@ exports.findTradeById = async (userId, tradeId) => {
 
 //TODO - FINISH UPDATE TRADE
 exports.updateTradeById = async (userId, updatedData) => {
-    const query =''
-        // 'UPDATE trades SET trade_name = $1, description = $2 WHERE strategy_id = $3 AND user_id = $4 RETURNING *';
+    const query = '';
+    // 'UPDATE trades SET trade_name = $1, description = $2 WHERE strategy_id = $3 AND user_id = $4 RETURNING *';
     const { trade_id } = updatedData;
 
     try {
-        const result = await pool.query(query, [
-            trade_id,
-            userId,
-        ]);
+        const result = await pool.query(query, [trade_id, userId]);
         return result.rows[0];
     } catch (error) {
         throw new Error(error.message);
     }
 };
-
 
 exports.deleteTradeById = async (trade_id, user_id) => {
     const query =
@@ -97,6 +92,58 @@ exports.deleteTradeById = async (trade_id, user_id) => {
     try {
         const result = await pool.query(query, [trade_id, user_id]);
         return result.rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+exports.getTradeStatsByAccount = async (user_id) => {
+    const query = `SELECT 
+        account_name, 
+        accounts.account_id AS account_id,
+        sum(amount) AS "total_pnl", 
+        avg(amount)::numeric(10,2) AS "average amount", 
+        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average profit", 
+        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average loss", 
+        count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
+        count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
+        count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
+        count(*) AS "num_of_trades" 
+    FROM trades
+    JOIN accounts ON trades.account_id = accounts.account_id
+    WHERE trades.user_id = $1
+    GROUP BY accounts.account_id;`;
+
+    try {
+        const result = await pool.query(query, [user_id]);
+        return result.rows;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
+
+exports.getTradeStatsByStrategy = async (user_id, account_id) => {
+    const query = `SELECT 
+        strategy_name, 
+        strategies.strategy_id AS strategy_id,
+        sum(amount) AS "total_pnl", 
+        avg(amount)::numeric(10,2) AS "average amount", 
+        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average profit", 
+        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average loss", 
+        count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
+        count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
+        count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
+        count(*) AS "num_of_trades" 
+    FROM trades
+    JOIN strategies ON trades.strategy_id = strategies.strategy_id
+    WHERE trades.user_id = $1 AND trades.account_id = $2
+    GROUP BY accounts.account_id;`;
+
+    try {
+        const result = await pool.query(query, [user_id, account_id]);
+        return result.rows;
     } catch (error) {
         throw new Error(error.message);
     }

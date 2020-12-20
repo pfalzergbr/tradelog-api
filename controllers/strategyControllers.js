@@ -113,3 +113,16 @@ exports.getUserStrategies = async (req, res, next) => {
     }
 };
 
+
+
+exports.getStrategyStats = async (req, res, next) => {
+    const { accountId: account_id } = req.params 
+    const { user_id } = req.user;
+
+    try {
+        const strategyStats = await strategyService.getStrategyStats(user_id, account_id);
+        res.status(200).send({ strategyStats });
+    } catch (error) {
+        return next(error);
+    }
+}

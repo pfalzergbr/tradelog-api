@@ -25,6 +25,7 @@ router.post(
     strategyControllers.createStrategy,
 );
 // Get one strategy
+router.get('/stats/:accountId', auth, strategyControllers.getStrategyStats);
 router.get('/:strategyId', auth, strategyControllers.getStrategy);
 // Update a strategy - TODO: add validation
 router.patch('/:strategyId',     [

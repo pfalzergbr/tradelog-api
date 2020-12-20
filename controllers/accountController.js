@@ -72,3 +72,15 @@ exports.deleteAccount = async (req, res, next) => {
         return next(error);
     }
 };
+
+
+exports.getAccountStats = async (req, res, next) => {
+    const { user_id } = req.user;
+
+    try {
+        const accountStats = await accountService.getAccountStats(user_id);
+        res.status(200).send({ accountStats });
+    } catch (error) {
+        return next(error);
+    }
+}

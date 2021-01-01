@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const jwtSecret = process.env.JWT_SECRET;
+const keys = require('../config/keys')
+const jwtSecret = keys.JWT_SECRET;
 
 const generateAuthToken = ( user ) => {
     const token = jwt.sign({user_id: user.user_id}, jwtSecret, /*{expiresIn: '2d'}*/)

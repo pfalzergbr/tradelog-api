@@ -114,6 +114,8 @@ exports.getUserStrategies = async (req, res, next) => {
 };
 
 
+// Get all strategy stats
+// @GET /api/strategy/stats/:accountId
 
 exports.getStrategyStats = async (req, res, next) => {
     const { accountId: account_id } = req.params 

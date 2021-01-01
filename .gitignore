@@ -1,4 +1,5 @@
-config
+config/dev.js
+config/dev.env
 node_modules
 
 utils/userQuery.js

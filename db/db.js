@@ -1,11 +1,11 @@
 const Pool = require('pg').Pool;
+const keys = require('../config/keys');
 
-
-const user = process.env.PSQL_USER;
-const password = process.env.PSQL_PASSWORD;
-const host = process.env.PSQL_HOST;
-const port = process.env.PSQL_PORT;
-const database = process.env.PSQL_DBNAME;
+const user = keys.PSQL_USER;
+const password = keys.PSQL_PASSWORD;
+const host = keys.PSQL_HOST;
+const port = keys.PSQL_PORT;
+const database = keys.PSQL_DBNAME;
 
 const pool = new Pool({
     user,

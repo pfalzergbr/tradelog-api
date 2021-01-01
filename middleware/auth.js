@@ -1,9 +1,10 @@
 //Requires
 const jwt = require('jsonwebtoken');
+const keys = require('../config/keys')
 const pool = require('../db/db');
 
 //Enviromental Variables
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = keys.JWT_SECRET;
 
 //Authentication middleware
 const auth = async (req, res, next) => {

@@ -102,9 +102,9 @@ exports.getTradeStatsByAccount = async (user_id) => {
         account_name, 
         accounts.account_id AS account_id,
         sum(amount) AS "total_pnl", 
-        avg(amount)::numeric(10,2) AS "average amount", 
-        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average profit", 
-        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average loss", 
+        avg(amount)::numeric(10,2) AS "average_amount", 
+        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
+        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average_loss", 
         count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
         count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
         count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
@@ -122,16 +122,14 @@ exports.getTradeStatsByAccount = async (user_id) => {
     }
 };
 
-
-
 exports.getTradeStatsByStrategy = async (user_id, account_id) => {
     const query = `SELECT 
         strategy_name, 
         strategies.strategy_id AS strategy_id,
         sum(amount) AS "total_pnl", 
-        avg(amount)::numeric(10,2) AS "average amount", 
-        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average profit", 
-        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average loss", 
+        avg(amount)::numeric(10,2) AS "average_amount", 
+        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
+        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average_loss", 
         count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
         count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
         count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 

@@ -1,7 +1,7 @@
 //Require modules
 const express = require('express');
 const cors = require('cors');
-
+const morgan = require('morgan');
 //Enviromental Variables
 const port = process.env.PORT || 5000;
 
@@ -21,6 +21,11 @@ const strategyRoutes = require('./routes/strategyRoutes');
 app.use(express.json());
 //Setting CORS headers
 app.use(cors());
+
+if (process.env.NODE_ENV !== 'production'){
+    app.use(morgan('dev'))
+
+}
 //Routers
 app.use('/api/trades', tradeRoutes);
 app.use('/api/user', userRoutes);

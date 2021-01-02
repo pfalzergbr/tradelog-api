@@ -60,9 +60,7 @@ exports.getAccountStrategies = async (userId, account_id) => {
     return strategies.filter(strategy => strategy.account_id === account_id);
 };
 
-
-
 exports.getStrategyStats = async (userId, accountId) => {
-    const strategyStats = await tradeDb.getTradeStatsByAccount(userId, accountId);
+    const strategyStats = await tradeDb.getTradeStatsByStrategy(userId, accountId);
     return strategyStats;
 };

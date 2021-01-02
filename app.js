@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const helmet = require('helmet')
 //Enviromental Variables
 const port = process.env.PORT || 5000;
 
@@ -17,7 +18,9 @@ const strategyRoutes = require('./routes/strategyRoutes');
 
 //Middlewares
 
+
 //Parse body
+app.use(helmet())
 app.use(express.json());
 //Setting CORS headers
 app.use(cors());
@@ -33,6 +36,7 @@ app.use('/api/account', accountRoutes);
 app.use('/api/strategy', strategyRoutes);
 //Error handling middleware, responding to frontend.
 app.use(errorHandler);
+
 
 //Set up port to listen to
 

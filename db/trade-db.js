@@ -87,7 +87,7 @@ exports.updateTradeById = async (userId, updatedData) => {
 
 exports.deleteTradeById = async (trade_id, user_id) => {
     const query =
-        'DELETE FROM trades WHERE trade_id = $1 AND user_id = $2 RETURNING account_id';
+        'DELETE FROM trades WHERE trade_id = $1 AND user_id = $2 RETURNING trade_id';
 
     try {
         const result = await pool.query(query, [trade_id, user_id]);
@@ -126,6 +126,7 @@ exports.getTradeStatsByStrategy = async (user_id, account_id) => {
     const query= `
     SELECT 
         strategy_name, 
+        strategies.strategy_id,
         sum(amount) AS "total_pnl", 
         avg(amount)::numeric(10,2) AS "average amount", 
         avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average profit", 

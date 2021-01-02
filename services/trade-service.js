@@ -62,14 +62,14 @@ exports.updateStrategy = async (userId, updatedData) => {
 };
 
 exports.deleteTrade = async (trade_id, user_id) => {
-    const deletedTrade = await tradeDb.deleteStrategyById(
+    const deletedTrade = await tradeDb.deleteTradeById(
         trade_id,
         user_id,
     );
 
     if (!deletedTrade) {
         const error = new Error();
-        error.message = 'Cannot delete. Strategy not found';
+        error.message = 'Cannot delete. Trade not found';
         error.code = '404';
         throw new Error(error.message);
     }

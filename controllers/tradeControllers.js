@@ -104,10 +104,13 @@ exports.deleteTrade = async (req, res, next) => {
     const { tradeId: trade_id } = req.params;
     const { user_id } = req.user;
 
+    console.log(trade_id, user_id)
+
     try {
         const deletedTrade = await tradeService.deleteTrade(trade_id, user_id);
-        res.status(200).send({ message: 'Trade deleted', deletedTrade });
+        res.status(200).send({ deletedTrade });
     } catch (error) {
+        console.log(error);
         return next(error);
     }
 };

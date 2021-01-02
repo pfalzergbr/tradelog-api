@@ -34,7 +34,7 @@ router.get('/account/:accountId', auth, tradeController.getTradesByAccount);
 //Fetch all trades by strategy
 router.get('/strategy/:strategyId', auth, tradeController.getTradesByStrategy);
 
-//Fetch one trade from the database
+//Fetch all trades from the database
 router.get('/', auth, tradeController.getTradesByUser);
 //Fetch one trade from the database
 router.get('/:tradeId', auth, tradeController.getTrade);

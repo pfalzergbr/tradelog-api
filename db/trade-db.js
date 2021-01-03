@@ -7,12 +7,13 @@ exports.insertNewTrade = async (tradeData) => {
         amount,
         bias,
         notes,
+        date,
         account: account_id,
         strategy: strategy_id,
         user_id,
     } = tradeData;
     const query =
-        'INSERT INTO trades (symbol, outcome, amount, bias, notes, account_id, strategy_id, user_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
+        'INSERT INTO trades (symbol, outcome, amount, bias, notes, date, account_id, strategy_id, user_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
     try {
         const result = await pool.query(query, [
             symbol,
@@ -20,6 +21,7 @@ exports.insertNewTrade = async (tradeData) => {
             amount,
             bias,
             notes,
+            date,
             account_id,
             strategy_id,
             user_id,

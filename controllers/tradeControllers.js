@@ -7,9 +7,11 @@ exports.addNewTrade = async (req, res, next) => {
     const newTradeData = { ...req.body, user_id };
 
     const newTrade = tradeService.formatTrade(newTradeData);
-
+    console.log('formatted trade', newTrade);
     try {
         const trade = await tradeService.createNewTrade(newTrade);
+
+        console.log('back from db:', trade)
         res.status(200).send({ message: 'New trade created', trade });
     } catch (error) {
         return next(error);

@@ -10,14 +10,15 @@ const router = express.Router();
 
 //Create a new trading account for a user
 router.post(
-    '/',
-    auth,
-    [
-        body('accountName').not().isEmpty().trim(),
-        body('balance').not().isEmpty().isFloat(),
-        body('description').not().isEmpty().isString(),
-    ], checkValidation,
-    accountController.createAccount,
+  '/',
+  auth,
+  [
+    body('accountName').not().isEmpty().trim(),
+    body('balance').not().isEmpty().isFloat(),
+    body('description').not().isEmpty().isString(),
+  ],
+  checkValidation,
+  accountController.createAccount,
 );
 //Get stats by account
 router.get('/stats', auth, accountController.getAccountStats);
@@ -25,14 +26,15 @@ router.get('/stats', auth, accountController.getAccountStats);
 router.get('/single/:accountId', auth, accountController.getSingleAccount);
 //Update a single trading account
 router.patch(
-    '/:accountId',
-    auth,
-    [
-        body('accountName').not().isEmpty().trim(),
-        body('balance').isEmpty(),
-        body('description').not().isEmpty().isString(),
-    ], checkValidation,
-    accountController.updateAccount,
+  '/:accountId',
+  auth,
+  [
+    body('accountName').not().isEmpty().trim(),
+    body('balance').isEmpty(),
+    body('description').not().isEmpty().isString(),
+  ],
+  checkValidation,
+  accountController.updateAccount,
 );
 
 //TODO - ADD VALIDATION

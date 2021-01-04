@@ -8,11 +8,11 @@ const port = keys.PSQL_PORT;
 const database = keys.PSQL_DBNAME;
 
 const pool = new Pool({
-    user,
-    password,
-    host,
-    port,
-    database,
+  user,
+  password,
+  host,
+  port,
+  database,
 });
 
 module.exports = pool;

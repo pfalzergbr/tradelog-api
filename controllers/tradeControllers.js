@@ -12,13 +12,11 @@ exports.addNewTrade = async (req, res, next) => {
     const tradeData = await tradeService.createNewTrade(newTrade);
 
     console.log('back from db:', tradeData);
-    res
-      .status(200)
-      .send({
-        message: 'New trade created',
-        trade: tradeData.trade,
-        account: tradeData.account,
-      });
+    res.status(200).send({
+      message: 'New trade created',
+      trade: tradeData.trade,
+      account: tradeData.account,
+    });
   } catch (error) {
     return next(error);
   }
@@ -113,7 +111,7 @@ exports.deleteTrade = async (req, res, next) => {
 
   try {
     const deletedTradeData = await tradeService.deleteTrade(trade_id, user_id);
-    res.status(200).send( deletedTradeData );
+    res.status(200).send(deletedTradeData);
   } catch (error) {
     console.log(error);
     return next(error);

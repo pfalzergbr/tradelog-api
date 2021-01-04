@@ -5,7 +5,7 @@ const { body } = require('express-validator');
 //Require Middlewares
 const tradeController = require('../controllers/tradeControllers');
 const auth = require('../middleware/auth');
-const { checkValidation } = require('../middleware/check-Validation');
+const { checkValidation } = require('../middleware/check-validation');
 
 //Setup Router
 const router = express.Router();

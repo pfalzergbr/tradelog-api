@@ -7,7 +7,7 @@ exports.addNewTrade = async (req, res, next) => {
   const newTradeData = { ...req.body, user_id };
 
   const newTrade = tradeService.formatTrade(newTradeData);
-  
+
   try {
     const tradeData = await tradeService.createNewTrade(newTrade);
 
@@ -112,8 +112,8 @@ exports.deleteTrade = async (req, res, next) => {
   console.log(trade_id, user_id);
 
   try {
-    const deletedTrade = await tradeService.deleteTrade(trade_id, user_id);
-    res.status(200).send({ deletedTrade });
+    const deletedTradeData = await tradeService.deleteTrade(trade_id, user_id);
+    res.status(200).send( deletedTradeData );
   } catch (error) {
     console.log(error);
     return next(error);

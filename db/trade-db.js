@@ -29,7 +29,11 @@ exports.insertNewTrade = async tradeData => {
       strategy_id,
       user_id,
     ]);
-    const updatedAccount = await pool.query(accountQuery, [amount, user_id, account_id]);
+    const updatedAccount = await pool.query(accountQuery, [
+      amount,
+      user_id,
+      account_id,
+    ]);
     console.log(updatedAccount);
     await pool.query('COMMIT');
     return { trade: newTrade.rows[0], account: updatedAccount.rows[0] };
@@ -94,13 +98,26 @@ exports.updateTradeById = async (userId, updatedData) => {
 };
 
 exports.deleteTradeById = async (trade_id, user_id) => {
-  const query =
-    'DELETE FROM trades WHERE trade_id = $1 AND user_id = $2 RETURNING trade_id';
-
+  const tradeQuery =
+    'DELETE FROM trades WHERE trade_id = $1 AND user_id = $2 RETURNING *';
+  const accountQuery =
+    'UPDATE accounts SET balance = balance - $1 WHERE user_id = $2 AND account_id = $3 RETURNING *';
   try {
-    const result = await pool.query(query, [trade_id, user_id]);
-    return result.rows[0];
+    await pool.query('BEGIN');
+    const deletedTrade = await pool.query(tradeQuery, [trade_id, user_id]);
+    const { amount, account_id } = deletedTrade.rows[0];
+    const updatedAccount = await pool.query(accountQuery, [
+      amount,
+      user_id,
+      account_id,
+    ]);
+    await pool.query('COMMIT');
+    return {
+      deletedTrade: deletedTrade.rows[0],
+      account: updatedAccount.rows[0],
+    };
   } catch (error) {
+    await pool.query('ROLLBACK');
     throw new Error(error.message);
   }
 };

@@ -12,20 +12,21 @@ const router = express.Router();
 
 //Add a new trade to the database
 router.post(
-    '/',
-    auth,
-    [
-        body('symbol').not().isEmpty().isAlpha().trim(),
-        body('outcome').not().isEmpty().isIn(['breakeven', 'profit', 'loss']),
-        body('bias').not().isEmpty().isIn(['bullish', 'bearish', 'neutral']),
-        body('amount').not().isEmpty().isFloat(),
-        body('account').not().isEmpty().isString(),
-        body('strategy').not().isEmpty().isString(),
-        body('notes').isString(),
-        // body('date').isDate()
-        //Todo: ADD date validation
-    ], checkValidation,
-    tradeController.addNewTrade,
+  '/',
+  auth,
+  [
+    body('symbol').not().isEmpty().isAlpha().trim(),
+    body('outcome').not().isEmpty().isIn(['breakeven', 'profit', 'loss']),
+    body('bias').not().isEmpty().isIn(['bullish', 'bearish', 'neutral']),
+    body('amount').not().isEmpty().isFloat(),
+    body('account').not().isEmpty().isString(),
+    body('strategy').not().isEmpty().isString(),
+    body('notes').isString(),
+    // body('date').isDate()
+    //Todo: ADD date validation
+  ],
+  checkValidation,
+  tradeController.addNewTrade,
 );
 
 //Fetch all trades by account ID

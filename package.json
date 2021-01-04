@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "jest --watch",
-    "start": "node ../app.js",
-    "server": "nodemon app.js"
+    "start": "node ./app.js",
+    "server": "nodemon ./app.js"
   },
   "keywords": [],
   "author": "Gabor Pfalzer",

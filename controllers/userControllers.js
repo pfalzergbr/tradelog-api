@@ -33,6 +33,8 @@ exports.getUserData = async (req, res, next) => {
 exports.registerUser = async (req, res, next) => {
   const { name, email, password, verify } = req.body;
 
+  console.log(req.body);
+  
   try {
     await userService.checkIsEmailRegistered(email);
     userService.verifyPassword(password, verify);
@@ -53,6 +55,7 @@ exports.registerUser = async (req, res, next) => {
       token,
     });
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };

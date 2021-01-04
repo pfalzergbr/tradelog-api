@@ -34,7 +34,6 @@ exports.insertNewTrade = async tradeData => {
       user_id,
       account_id,
     ]);
-    console.log(updatedAccount);
     await pool.query('COMMIT');
     return { trade: newTrade.rows[0], account: updatedAccount.rows[0] };
   } catch (error) {
@@ -126,6 +125,7 @@ exports.getTradeStatsByAccount = async user_id => {
   const query = `SELECT 
         account_name, 
         accounts.account_id AS account_id,
+        accounts.balance,
         sum(amount) AS "total_pnl", 
         avg(amount)::numeric(10,2) AS "average_amount", 
         avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
@@ -143,6 +143,7 @@ exports.getTradeStatsByAccount = async user_id => {
     const result = await pool.query(query, [user_id]);
     return result.rows;
   } catch (error) {
+    console.log(error)
     throw new Error(error.message);
   }
 };

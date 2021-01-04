@@ -6,8 +6,6 @@ const helmet = require('helmet');
 //Enviromental Variables
 const port = process.env.PORT || 5000;
 
-//Login URLs
-
 //Router definitions
 const app = express();
 const errorHandler = require('./middleware/errorHandler');

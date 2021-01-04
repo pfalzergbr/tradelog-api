@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async email => {
   const user = await userDb.findUserByEmail(email);
+  console.log('email to find', email)
+  console.log(user)
   if (user) {
     const error = new Error();
     error.message = 'E-mail already registered, please log in';

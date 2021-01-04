@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "jest --watch",
-    "start": "node app.js",
+    "start": "node app/app.js",
     "server": "nodemon app.js"
   },
   "keywords": [],

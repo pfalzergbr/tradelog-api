@@ -1,5 +1,9 @@
 CREATE DATABASE tradelog;
 
+--Created UUID extension
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Create Users table
 CREATE TABLE users (
     user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

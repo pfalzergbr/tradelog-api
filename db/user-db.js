@@ -32,17 +32,6 @@ exports.findUserById = async (id) => {
         throw new Error(error.message);
     }
 }
-//TODO - REFACTOR QUERY
-// exports.populateUserData = async (id) => {
-//     const query = 'SELECT account_name, strategy_name FROM users JOIN accounts ON users.user_id = accounts.user_id JOIN strategies ON users.user_id = strategies.user_id WHERE users.user_id = $1;';
-
-//     try {
-//         const result = await pool.query(query, [id])
-//         return result.rows
-//     } catch (error) {
-//         throw new Error(error.message);
-//     }
-// }
 
 exports.updateUserById = async (id, update) => {
     const { name } = update;

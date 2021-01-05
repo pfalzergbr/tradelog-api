@@ -67,8 +67,6 @@ exports.getStrategyStats = async (userId, accountId) => {
   );
   const formattedStats = strategyStats.map(strategy => (  {
     ...strategy, 
-    balance: parseFloat(strategy.balance),
-    opening_balance:parseFloat(strategy.opening_balance),
     total_pnl:parseFloat(strategy.total_pnl),
     average_amount:parseFloat(strategy.average_amount),
     average_profit:parseFloat(strategy.average_profit),

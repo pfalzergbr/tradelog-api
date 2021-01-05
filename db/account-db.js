@@ -3,10 +3,11 @@ const pool = require('./db');
 exports.insertNewAccount = async (id, accountData) => {
   const { account_name, balance, description } = accountData;
   const query =
-    'INSERT INTO accounts (account_name, balance, description, user_id) VALUES($1, $2, $3, $4) RETURNING *';
+    'INSERT INTO accounts (account_name, balance, opening_balance, description, user_id) VALUES($1, $2, $3, $4, $5) RETURNING *';
   try {
     const result = await pool.query(query, [
       account_name,
+      balance,
       balance,
       description,
       id,

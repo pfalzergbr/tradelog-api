@@ -50,5 +50,23 @@ exports.deleteAccount = async (account_id, user_id) => {
 
 exports.getAccountStats = async userId => {
   const accountStats = await tradeDb.getTradeStatsByAccount(userId);
-  return accountStats;
+
+  const formattedStats = accountStats.map(account => (  {
+    ...account, 
+    balance: parseFloat(account.balance),
+    opening_balance:parseFloat(account.opening_balance),
+    total_pnl:parseFloat(account.total_pnl),
+    average_amount:parseFloat(account.average_amount),
+    average_profit:parseFloat(account.average_profit),
+    average_loss:parseFloat(account.average_loss),
+    num_of_loss: parseFloat(account.num_of_loss),
+    num_of_profit:parseFloat(account.num_of_profit),
+    num_of_be:parseFloat(account.num_of_be), 
+    num_of_trades:parseFloat(account.num_of_trades)
+  }))
+  
+  console.log(formattedStats)
+
+  // console.log(formattedStats);
+  return formattedStats;
 };

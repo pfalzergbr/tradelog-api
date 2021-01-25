@@ -1,6 +1,7 @@
 const accountDb = require('../db/account-db');
 const tradeDb = require('../db/trade-db');
 
+
 exports.createNewAccount = async (userId, accountData) => {
   const account = await accountDb.insertNewAccount(userId, accountData);
   return account;
@@ -13,6 +14,7 @@ exports.getAccounts = async userId => {
 
 exports.getOneAccount = async (userId, accountId) => {
   const account = await accountDb.findAccountById(userId, accountId);
+  console.log(account);
 
   if (!account) {
     const error = new Error();
@@ -64,9 +66,6 @@ exports.getAccountStats = async userId => {
     num_of_be:parseFloat(account.num_of_be), 
     num_of_trades:parseFloat(account.num_of_trades)
   }))
-  
-  console.log(formattedStats)
-
-  // console.log(formattedStats);
+  console.log(formattedStats);
   return formattedStats;
 };

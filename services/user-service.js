@@ -33,7 +33,6 @@ exports.createUser = async userData => {
 
 exports.checkLoginEmail = async email => {
   const user = await userDb.findUserByEmail(email);
-  // console.log(user)
   if (!user) {
     const error = new Error();
     error.message = 'Unable to log in';

@@ -39,6 +39,7 @@ exports.insertNewTrade = async (tradeData, snapshotBalance, currency) => {
     await pool.query('COMMIT');
     return { trade: newTrade.rows[0], account: updatedAccount.rows[0] };
   } catch (error) {
+    console.log(error);
     await pool.query('ROLLBACK');
     throw new Error(error.message);
   }

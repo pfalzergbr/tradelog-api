@@ -1,10 +1,19 @@
 const accountDb = require('../db/account-db');
 const tradeDb = require('../db/trade-db');
+const strategyDb = require('../db/strategy-db')
 
 
 exports.createNewAccount = async (userId, accountData) => {
   const account = await accountDb.insertNewAccount(userId, accountData);
-  return account;
+  
+  const strategyData = {
+    strategy_name: 'No strategy',
+    account_id: account.account_id,
+    description: 'Trades without assigned strategies'
+  }
+
+  const strategy = await strategyDb.insertNewStrategy(userId, strategyData);
+  return { account, strategy };
 };
 
 exports.getAccounts = async userId => {

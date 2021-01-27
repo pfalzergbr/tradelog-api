@@ -2,7 +2,7 @@ const strategyDb = require('../db/strategy-db');
 const tradeDb = require('../db/trade-db');
 
 exports.newStrategy = async (userId, strategyData) => {
-  const strategy = strategyDb.insertNewStrategy(userId, strategyData);
+  const strategy = await strategyDb.insertNewStrategy(userId, strategyData);
   return strategy;
 };
 

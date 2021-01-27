@@ -4,13 +4,14 @@ const accountService = require('../services/account-service');
 
 exports.createAccount = async (req, res, next) => {
   const { user_id } = req.user;
-  const { accountName: account_name, balance, description } = req.body;
+  const { accountName: account_name, balance, description, currency } = req.body;
 
   try {
     const account = await accountService.createNewAccount(user_id, {
       account_name,
       balance,
       description,
+      currency
     });
     res.status(200).send(account);
   } catch (error) {

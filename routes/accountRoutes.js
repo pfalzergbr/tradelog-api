@@ -16,6 +16,7 @@ router.post(
     body('accountName').not().isEmpty().trim(),
     body('balance').not().isEmpty().isFloat(),
     body('description').not().isEmpty().isString(),
+    body('currency').not().isEmpty().isIn(['usd', 'gbp', 'eur', 'jpy']),
   ],
   checkValidation,
   accountController.createAccount,

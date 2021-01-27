@@ -1,9 +1,10 @@
 const pool = require('./db');
 
 exports.insertNewAccount = async (id, accountData) => {
-  const { account_name, balance, description } = accountData;
+  const { account_name, balance, description, currency } = accountData;
+  console.log(currency)
   const query =
-    'INSERT INTO accounts (account_name, balance, opening_balance, description, user_id) VALUES($1, $2, $3, $4, $5) RETURNING *';
+    'INSERT INTO accounts (account_name, balance, opening_balance, description, user_id, currency) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
   try {
     const result = await pool.query(query, [
       account_name,
@@ -11,6 +12,7 @@ exports.insertNewAccount = async (id, accountData) => {
       balance,
       description,
       id,
+      currency
     ]);
     return result.rows[0];
   } catch (error) {
@@ -19,18 +21,15 @@ exports.insertNewAccount = async (id, accountData) => {
 };
 
 exports.getSnapshotBalance = async (accountId, userId) => {
-
   const query =
-   'SELECT balance, currency FROM accounts WHERE account_id = $1 AND user_id = $2'
+    'SELECT balance, currency FROM accounts WHERE account_id = $1 AND user_id = $2';
   try {
-    const result = await pool.query(query, [
-      accountId, userId
-    ]);
+    const result = await pool.query(query, [accountId, userId]);
     return result.rows[0];
   } catch (error) {
     throw new Error(error.message);
   }
-}
+};
 
 exports.findAccountsByUserId = async id => {
   const query = 'SELECT * FROM accounts WHERE user_id = $1';

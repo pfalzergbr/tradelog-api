@@ -59,6 +59,7 @@ CREATE TABLE trades (
     date TIMESTAMP NOT NULL DEFAULT NOW(),
     snapshot_balance DECIMAL(12,2) NOT NULL,
     notes TEXT,
+    currency currency_type NOT NULL,
     user_id uuid NOT NULL,
     account_id uuid NOT NULL,
     strategy_id uuid NOT NULL,

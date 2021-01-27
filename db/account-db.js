@@ -21,7 +21,7 @@ exports.insertNewAccount = async (id, accountData) => {
 exports.getSnapshotBalance = async (accountId, userId) => {
 
   const query =
-   'SELECT balance FROM accounts WHERE account_id = $1 AND user_id = $2'
+   'SELECT balance, currency FROM accounts WHERE account_id = $1 AND user_id = $2'
   try {
     const result = await pool.query(query, [
       accountId, userId

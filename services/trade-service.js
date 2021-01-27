@@ -15,9 +15,8 @@ exports.formatTrade = tradeData => {
 };
 
 exports.createNewTrade = async tradeData => {
-  const snapshotBalance = await accountDb.getSnapshotBalance(tradeData.account, tradeData.user_id)
-  console.log(snapshotBalance);
-  const trade = await tradeDb.insertNewTrade(tradeData, snapshotBalance.balance);
+  const {balance, currency} = await accountDb.getSnapshotBalance(tradeData.account, tradeData.user_id)
+  const trade = await tradeDb.insertNewTrade(tradeData, balance, currency);
   return trade;
 };
 

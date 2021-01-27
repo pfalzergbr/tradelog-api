@@ -1,15 +1,16 @@
 const pool = require('./db');
 
 exports.insertNewStrategy = async (user_id, strategyData) => {
-  const { strategy_name, account_id, description } = strategyData;
+  const { strategy_name, account_id, description, is_default = false} = strategyData;
   const query =
-    'INSERT INTO strategies (strategy_name, description, account_id,  user_id) VALUES($1, $2, $3, $4) RETURNING *';
+    'INSERT INTO strategies (strategy_name, description, account_id, user_id, is_default) VALUES($1, $2, $3, $4, $5) RETURNING *';
   try {
     const result = await pool.query(query, [
       strategy_name,
       description,
       account_id,
       user_id,
+      is_default
     ]);
     return result.rows[0];
   } catch (error) {

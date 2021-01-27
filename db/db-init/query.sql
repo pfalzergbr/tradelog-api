@@ -49,5 +49,6 @@ WHERE trades.user_id = '6221a50c-da34-4966-bac9-32460c9ab814' AND trades.account
 GROUP BY strategies.strategy_id;
 
 ALTER TABLE accounts ADD currency currency_type;
+ALTER TABLE strategies ADD is_default BOOLEAN NOT NULL DEFAULT 'false';
 ALTER TABLE trades ADD currency currency_type;
 ALTER TABLE trades ADD snapshot_balance DECIMAL(12,2);

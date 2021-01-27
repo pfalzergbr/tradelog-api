@@ -9,7 +9,8 @@ exports.createNewAccount = async (userId, accountData) => {
   const strategyData = {
     strategy_name: 'No strategy',
     account_id: account.account_id,
-    description: 'Trades without assigned strategies'
+    description: 'Trades without assigned strategies',
+    is_default: true
   }
 
   const strategy = await strategyDb.insertNewStrategy(userId, strategyData);

@@ -1,13 +1,10 @@
 const userDb = require('../db/user-db');
 const strategyDb = require('../db/strategy-db');
 const accountDb = require('../db/account-db');
-const tradeDb = require('../db/trade-db');
 const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async email => {
   const user = await userDb.findUserByEmail(email);
-  console.log('email to find', email)
-  console.log(user)
   if (user) {
     const error = new Error();
     error.message = 'E-mail already registered, please log in';

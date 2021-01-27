@@ -1,5 +1,6 @@
 const strategyDb = require('../db/strategy-db');
 const tradeDb = require('../db/trade-db');
+const HttpError = require('../models/http-error');
 
 exports.newStrategy = async (userId, strategyData) => {
   const strategy = await strategyDb.insertNewStrategy(userId, strategyData);
@@ -35,7 +36,14 @@ exports.updateStrategy = async (userId, updatedData) => {
   return updatedStrategy;
 };
 
+
 exports.deleteStrategy = async (strategy_id, user_id) => {
+  const strategy = await strategyDb.findStrategyById(user_id, strategy_id)
+  
+  if (strategy.is_default) {
+    throw new HttpError('This strategy cannot be deleted manually', 401)
+  }
+  
   const deletedStrategy = await strategyDb.deleteStrategyById(
     strategy_id,
     user_id,

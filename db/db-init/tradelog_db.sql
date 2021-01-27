@@ -13,11 +13,13 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TYPE currency_type AS ENUM ('usd', 'eur', 'gbp', 'jpy');
 
 -- Create Accounts Table
 CREATE TABLE accounts (
     account_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     account_name VARCHAR(255) NOT NULL,
+    currency currency_type NOT NULL,
     description TEXT,
     balance DECIMAL(12,2) NOT NULL DEFAULT 0,
     opening_balance DECIMAL(12,2) NOT NULL DEFAULT 0,
@@ -55,6 +57,7 @@ CREATE TABLE trades (
     amount DECIMAL(12,2) NOT NULL DEFAULT 0,
     bias bias_type NOT NULL DEFAULT 'neutral',
     date TIMESTAMP NOT NULL DEFAULT NOW(),
+    snapshot_balance DECIMAL(12,2) NOT NULL,
     notes TEXT,
     user_id uuid NOT NULL,
     account_id uuid NOT NULL,

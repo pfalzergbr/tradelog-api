@@ -73,7 +73,6 @@ exports.findTradeByAccountId = async (userId, accountId) => {
     const result = await pool.query(query, [userId, accountId]);
     return result.rows;
   } catch (error) {
-    console.log(error)
     throw new Error(error.message);
   }
 };
@@ -89,7 +88,22 @@ exports.findTradeByStrategyId = async (userId, strategyId) => {
 };
 
 exports.findTradeById = async (userId, tradeId) => {
-  const query = 'SELECT * FROM trades WHERE trade_id = $1 AND user_id = $2';
+  const query = `SELECT 
+  trade_id, 
+  symbol, 
+  outcome, 
+  amount, 
+  bias, 
+  date, 
+  notes, 
+  trades.user_id, 
+  trades.account_id, 
+  trades.strategy_id, 
+  trades.created_at, 
+  strategy_name 
+  FROM trades 
+  JOIN strategies ON strategies.strategy_id = trades.strategy_id 
+  WHERE trades.trade_id = $1 AND trades.user_id = $2`;;
   try {
     const result = await pool.query(query, [tradeId, userId]);
     return result.rows[0];
@@ -155,24 +169,6 @@ exports.getTradeStatsByAccount = async user_id => {
     JOIN trades ON trades.account_id = accounts.account_id
     WHERE trades.user_id = $1
     GROUP BY accounts.account_id;`;
-
-  // const query = `SELECT 
-  //       account_name, 
-  //       accounts.account_id AS account_id,
-  //       accounts.balance,
-  //       accounts.opening_balance,
-  //       sum(amount) AS "total_pnl", 
-  //       avg(amount)::numeric(10,2) AS "average_amount", 
-  //       avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
-  //       avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average_loss", 
-  //       count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
-  //       count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
-  //       count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
-  //       count(*) AS "num_of_trades" 
-  //   FROM trades
-  //   JOIN accounts ON trades.account_id = accounts.account_id
-  //   WHERE trades.user_id = $1
-  //   GROUP BY accounts.account_id;`;
 
   try {
     const result = await pool.query(query, [user_id]);

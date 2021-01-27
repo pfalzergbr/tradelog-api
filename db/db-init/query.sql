@@ -47,3 +47,6 @@ FROM trades
 JOIN strategies ON trades.strategy_id = strategies.strategy_id
 WHERE trades.user_id = '6221a50c-da34-4966-bac9-32460c9ab814' AND trades.account_id = 'f6d23aa0-23d2-480e-b86e-f4edf6540211'
 GROUP BY strategies.strategy_id;
+
+ALTER TABLE accounts ADD currency currency_type;
+ALTER TABLE trades ADD snapshot_balance DECIMAL(12,2);

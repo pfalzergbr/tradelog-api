@@ -10,8 +10,7 @@ exports.addNewTrade = async (req, res, next) => {
 
   try {
     const tradeData = await tradeService.createNewTrade(newTrade);
-
-    console.log('back from db:', tradeData);
+    
     res.status(200).send({
       message: 'New trade created',
       trade: tradeData.trade,

@@ -18,6 +18,20 @@ exports.insertNewAccount = async (id, accountData) => {
   }
 };
 
+exports.getSnapshotBalance = async (accountId, userId) => {
+
+  const query =
+   'SELECT balance FROM accounts WHERE account_id = $1 AND user_id = $2'
+  try {
+    const result = await pool.query(query, [
+      accountId, userId
+    ]);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 exports.findAccountsByUserId = async id => {
   const query = 'SELECT * FROM accounts WHERE user_id = $1';
 

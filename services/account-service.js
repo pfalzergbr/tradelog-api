@@ -66,6 +66,5 @@ exports.getAccountStats = async userId => {
     num_of_be:parseFloat(account.num_of_be), 
     num_of_trades:parseFloat(account.num_of_trades)
   }))
-  console.log(formattedStats);
   return formattedStats;
 };

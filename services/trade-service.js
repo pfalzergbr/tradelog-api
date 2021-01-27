@@ -1,4 +1,6 @@
 const tradeDb = require('../db/trade-db');
+const accountDb = require('../db/account-db');
+
 // const generalDb = require('../db/general-db');
 
 //TODO ADD DATE
@@ -13,7 +15,9 @@ exports.formatTrade = tradeData => {
 };
 
 exports.createNewTrade = async tradeData => {
-  const trade = await tradeDb.insertNewTrade(tradeData);
+  const snapshotBalance = await accountDb.getSnapshotBalance(tradeData.account, tradeData.user_id)
+  console.log(snapshotBalance);
+  const trade = await tradeDb.insertNewTrade(tradeData, snapshotBalance.balance);
   return trade;
 };
 

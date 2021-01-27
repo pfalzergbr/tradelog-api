@@ -171,7 +171,7 @@ exports.getTradeStatsByAccount = async user_id => {
         count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
         count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
         count(*) AS "num_of_trades" ,
-        count(DISTINCT trades.strategy_id) AS "num of strategies"
+        count(DISTINCT trades.strategy_id) AS "num_of_strategies"
     FROM accounts
     JOIN trades ON trades.account_id = accounts.account_id
     WHERE trades.user_id = $1

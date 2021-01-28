@@ -52,3 +52,4 @@ ALTER TABLE accounts ADD currency currency_type;
 ALTER TABLE strategies ADD is_default BOOLEAN NOT NULL DEFAULT 'false';
 ALTER TABLE trades ADD currency currency_type;
 ALTER TABLE trades ADD snapshot_balance DECIMAL(12,2);
+ALTER TABLE trades ADD relative_gain DECIMAL(12,2);

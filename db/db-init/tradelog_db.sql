@@ -56,6 +56,7 @@ CREATE TABLE trades (
     symbol VARCHAR(16) NOT NULL,
     outcome outcome_type NOT NULL DEFAULT 'breakeven',
     amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+    relative_gain DECIMAL(12,2) NOT NULL DEFAULT 0,
     bias bias_type NOT NULL DEFAULT 'neutral',
     date TIMESTAMP NOT NULL DEFAULT NOW(),
     snapshot_balance DECIMAL(12,2) NOT NULL,

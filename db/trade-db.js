@@ -1,6 +1,6 @@
 const pool = require('./db');
 
-exports.insertNewTrade = async (tradeData, snapshotBalance, currency) => {
+exports.insertNewTrade = async (tradeData, snapshotBalance, currency, relativeGain) => {
   const {
     symbol,
     outcome,
@@ -13,7 +13,7 @@ exports.insertNewTrade = async (tradeData, snapshotBalance, currency) => {
     user_id,
   } = tradeData;
   const tradeQuery =
-    'INSERT INTO trades (symbol, outcome, amount, bias, notes, date, account_id, strategy_id, user_id, snapshot_balance, currency) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *';
+    'INSERT INTO trades (symbol, outcome, amount, bias, notes, date, account_id, strategy_id, user_id, snapshot_balance, currency, relative_gain) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *';
   const accountQuery =
     'UPDATE accounts SET balance = balance + $1 WHERE user_id = $2 AND account_id = $3 RETURNING *';
   try {
@@ -29,7 +29,8 @@ exports.insertNewTrade = async (tradeData, snapshotBalance, currency) => {
       strategy_id,
       user_id,
       snapshotBalance,
-      currency 
+      currency,
+      relativeGain 
     ]);
     const updatedAccount = await pool.query(accountQuery, [
       amount,

@@ -1,9 +1,16 @@
 const tradeDb = require('../db/trade-db');
 const accountDb = require('../db/account-db');
 
-// const generalDb = require('../db/general-db');
 
-//TODO ADD DATE
+const calcTradeGain = (snapshotBalance, tradeAmount) => {
+  const relativeGain = ((tradeAmount / snapshotBalance) * 100).toFixed(2)
+  if (relativeGain === 'NaN'){
+    return 0
+  }
+  return relativeGain;
+}
+
+
 exports.formatTrade = tradeData => {
   const amount = parseFloat(tradeData.amount);
   const trade = {
@@ -15,8 +22,12 @@ exports.formatTrade = tradeData => {
 };
 
 exports.createNewTrade = async tradeData => {
-  const {balance, currency} = await accountDb.getSnapshotBalance(tradeData.account, tradeData.user_id)
-  const trade = await tradeDb.insertNewTrade(tradeData, balance, currency);
+  const { balance, currency } = await accountDb.getSnapshotBalance(
+    tradeData.account,
+    tradeData.user_id,
+  );
+  const relativeGain = calcTradeGain(balance, tradeData.amount);
+  const trade = await tradeDb.insertNewTrade(tradeData, balance, currency, relativeGain);
   return trade;
 };
 
@@ -72,3 +83,5 @@ exports.deleteTrade = async (trade_id, user_id) => {
   }
   return deletedTrade;
 };
+
+

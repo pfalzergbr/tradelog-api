@@ -71,8 +71,8 @@ exports.updateTradeStrategy = async (trade_id, userId, updates) => {
     }
 
     return updatedTrade;
-  } else if (updates.description) { 
-    const updatedTrade = await tradeDb.changeTradeDescription(trade_id, userId, updates.strategy);
+  } else if (updates.notes) { 
+    const updatedTrade = await tradeDb.changeTradeDescription(trade_id, userId, updates.notes);
 
     if (!updatedTrade) {
       const error = new Error();

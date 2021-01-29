@@ -92,7 +92,7 @@ exports.updateTrade = async (req, res, next) => {
       user_id,
       updates,
     );
-    res.status(200).send(updatedTrade);
+    res.status(200).send({updatedTrade});
   } catch (error) {
     console.log(error);
     return next(error);

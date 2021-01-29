@@ -129,12 +129,13 @@ exports.changeTradeStrategy = async (tradeId, userId, updatedStrategy) => {
     const result = await pool.query(query, [updatedStrategy, tradeId, userId]);
     return result.rows[0];
   } catch (error) {
+    console.log(error)
     throw new Error(error.message);
   }
 };
 
 exports.changeTradeDescription = async (tradeId, userId, upatedDescription) => {
-  const query = 'UPDATE trades SET description = $1 WHERE trade_id = $2 AND user_id = $3 RETURNING *';
+  const query = 'UPDATE trades SET notes = $1 WHERE trade_id = $2 AND user_id = $3 RETURNING *';
 
   try {
     const result = await pool.query(query, [upatedDescription, tradeId, userId]);

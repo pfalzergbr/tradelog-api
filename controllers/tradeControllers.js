@@ -84,16 +84,17 @@ exports.getTrade = async (req, res, next) => {
 exports.updateTrade = async (req, res, next) => {
   const { tradeId: trade_id } = req.params;
   const { user_id } = req.user;
-  const updates = { ...req.body, user_id };
+  const updates = { ...req.body};
 
   try {
-    const updatedTrade = await tradeService.updateTrade(
+    const updatedTrade = await tradeService.updateTradeStrategy(
       trade_id,
       user_id,
       updates,
     );
     res.status(200).send(updatedTrade);
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };

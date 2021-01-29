@@ -59,17 +59,32 @@ exports.getTradeById = async (userId, tradeId) => {
   return trade;
 };
 
-exports.updateStrategy = async (userId, updatedData) => {
-  const updatedTrade = await tradeDb.updateTradeById(userId, updatedData);
+exports.updateTradeStrategy = async (trade_id, userId, updates) => {
+  if (updates.strategy) {
+    const updatedTrade = await tradeDb.changeTradeStrategy(trade_id, userId, updates.strategy);
 
-  if (!updatedTrade) {
-    const error = new Error();
-    error.message = 'Cannot update. Trade not found';
-    error.code = '404';
-    throw new Error(error.message);
+    if (!updatedTrade) {
+      const error = new Error();
+      error.message = 'Cannot update. Trade not found';
+      error.code = '404';
+      throw new Error(error.message);
+    }
+
+    return updatedTrade;
+  } else if (updates.description) { 
+    const updatedTrade = await tradeDb.changeTradeDescription(trade_id, userId, updates.strategy);
+
+    if (!updatedTrade) {
+      const error = new Error();
+      error.message = 'Cannot update. Trade not found';
+      error.code = '404';
+      throw new Error(error.message);
+    }
+    return updatedTrade;
+  } else {
+    throw new Error;
   }
 
-  return updatedTrade;
 };
 
 exports.deleteTrade = async (trade_id, user_id) => {

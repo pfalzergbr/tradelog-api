@@ -42,7 +42,7 @@ router.get('/:tradeId', auth, tradeController.getTrade);
 
 //Update a trade in the database - TODO: ADD VALIDATION
 // ADD VALIDATION
-router.patch('/tradeId', auth, tradeController.updateTrade);
+router.patch('/:tradeId', auth, tradeController.updateTrade);
 
 //Delete a trade in the database -- TO WORK ON
 router.delete('/:tradeId', auth, tradeController.deleteTrade);

@@ -71,7 +71,8 @@ exports.findTradeByAccountId = async (userId, accountId) => {
   trades.account_id, 
   trades.strategy_id, 
   trades.created_at, 
-  strategy_name 
+  strategy_name,
+  relative_gain
   FROM trades 
   JOIN strategies ON strategies.strategy_id = trades.strategy_id 
   WHERE trades.user_id = $1 AND trades.account_id = $2`;
@@ -108,7 +109,8 @@ exports.findTradeById = async (userId, tradeId) => {
   trades.account_id, 
   trades.strategy_id, 
   trades.created_at, 
-  strategy_name 
+  strategy_name,
+  relative_gain 
   FROM trades 
   JOIN strategies ON strategies.strategy_id = trades.strategy_id 
   WHERE trades.trade_id = $1 AND trades.user_id = $2`;;
@@ -120,14 +122,22 @@ exports.findTradeById = async (userId, tradeId) => {
   }
 };
 
-//TODO - FINISH UPDATE TRADE
-exports.updateTradeById = async (userId, updatedData) => {
-  const query = '';
-  // 'UPDATE trades SET trade_name = $1, description = $2 WHERE strategy_id = $3 AND user_id = $4 RETURNING *';
-  const { trade_id } = updatedData;
+exports.changeTradeStrategy = async (tradeId, userId, updatedStrategy) => {
+  const query = 'UPDATE trades SET strategy_id = $1 WHERE trade_id = $2 AND user_id = $3 RETURNING *';
 
   try {
-    const result = await pool.query(query, [trade_id, userId]);
+    const result = await pool.query(query, [updatedStrategy, tradeId, userId]);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+exports.changeTradeDescription = async (tradeId, userId, upatedDescription) => {
+  const query = 'UPDATE trades SET description = $1 WHERE trade_id = $2 AND user_id = $3 RETURNING *';
+
+  try {
+    const result = await pool.query(query, [upatedDescription, tradeId, userId]);
     return result.rows[0];
   } catch (error) {
     throw new Error(error.message);

@@ -185,6 +185,7 @@ exports.getTradeStatsByAccount = async user_id => {
   const query = `SELECT 
         account_name, 
         accounts.account_id AS account_id,
+        accounts.user_id,
         accounts.balance,
         accounts.opening_balance,
         accounts.description,

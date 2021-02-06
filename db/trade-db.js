@@ -237,26 +237,6 @@ exports.getTradeStatsByStrategy = async (user_id, account_id) => {
     WHERE strategies.user_id = $1 AND strategies.account_id = $2
     GROUP BY strategies.strategy_id
     `;
-    // SELECT 
-    //     strategy_name, 
-    //     strategies.strategy_id,
-    //     strategies.description,
-    //     strategies.user_id,
-    //     strategies.account_id,
-    //     strategies.is_default,
-    //     sum(amount) AS "total_pnl", 
-    //     avg(amount)::numeric(10,2) AS "average_amount", 
-    //     avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
-    //     avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average_loss", 
-    //     count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
-    //     count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
-    //     count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
-    //     count(*) AS "num_of_trades" 
-    // FROM strategies
-    // LEFT JOIN trades ON trades.strategy_id = strategies.strategy_id
-    // WHERE strategies.user_id = $1 AND strategies.account_id = $2
-    // GROUP BY strategies.strategy_id
-    // `;
 
   try {
     const result = await pool.query(query, [user_id, account_id]);

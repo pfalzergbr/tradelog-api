@@ -1,8 +1,16 @@
+const keys = require('./config/keys');
+
 // Update with your config settings.
 module.exports = {
   development: {
     client: 'pg',
-    connection: process.env.DB_URL,
+    // connection: process.env.DB_URL,
+    connection: {
+      host: keys.PSQL_HOST,
+      user: keys.PSQL_USER,
+      password: keys.PSQL_PASSWORD,
+      database: keys.PSQL_DBNAME
+    },
     migrations: {
       directory: './data/migrations',
     },

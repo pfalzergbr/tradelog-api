@@ -1,4 +1,4 @@
-CREATE DATABASE tradelog;
+(CREATE DATABASE tradelog;
 
 --Created UUID extension
 

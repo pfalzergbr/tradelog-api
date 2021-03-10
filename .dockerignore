@@ -1,0 +1,6 @@
+**/node_modules
+pgdata/
+**/pgdata
+.git
+.cache
+README.md

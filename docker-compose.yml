@@ -6,13 +6,16 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
     volumes: 
-      - ./pgdata:/var/lib/postgresql/data
+      - /databases/pgdata:/var/lib/postgresql/data
     ports: 
       - '5432:5432'
   server: 
     image: tradelog-api
     depends_on:
       - db
+    volumes:
+      - /app/node_modules
+      - .:/app
     ports: 
       - 5000:5000
     

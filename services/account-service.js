@@ -1,11 +1,11 @@
 const accountDb = require('../db/account-db');
 const tradeDb = require('../db/trade-db');
 const strategyDb = require('../db/strategy-db')
-
+const accountDA = require('../dataAccess/account');
 
 exports.createNewAccount = async (userId, accountData) => {
-  const account = await accountDb.insertNewAccount(userId, accountData);
-  
+  const account = await accountDA.insertNewAccount(userId, accountData);
+
   const strategyData = {
     strategy_name: 'No strategy',
     account_id: account.account_id,
@@ -24,7 +24,6 @@ exports.getAccounts = async userId => {
 
 exports.getOneAccount = async (userId, accountId) => {
   const account = await accountDb.findAccountById(userId, accountId);
-  console.log(account);
 
   if (!account) {
     const error = new Error();

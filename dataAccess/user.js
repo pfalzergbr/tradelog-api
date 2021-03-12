@@ -8,7 +8,6 @@ exports.insertUser = async ({email, name, hashedPassword}) => {
       user_password: hashedPassword
     })
     .returning(['user_email', 'user_name', 'user_password']);
-    console.log(user)
     return user[0];
     
 };

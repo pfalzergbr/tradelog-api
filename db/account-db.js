@@ -1,24 +1,24 @@
 const pool = require('./db');
 
-exports.insertNewAccount = async (id, accountData) => {
-  const { account_name, balance, description, currency } = accountData;
-  console.log(currency)
-  const query =
-    'INSERT INTO accounts (account_name, balance, opening_balance, description, user_id, currency) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
-  try {
-    const result = await pool.query(query, [
-      account_name,
-      balance,
-      balance,
-      description,
-      id,
-      currency
-    ]);
-    return result.rows[0];
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+// exports.insertNewAccount = async (id, accountData) => {
+//   const { account_name, balance, description, currency } = accountData;
+//   console.log(currency)
+//   const query =
+//     'INSERT INTO accounts (account_name, balance, opening_balance, description, user_id, currency) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+//   try {
+//     const result = await pool.query(query, [
+//       account_name,
+//       balance,
+//       balance,
+//       description,
+//       id,
+//       currency
+//     ]);
+//     return result.rows[0];
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// };
 
 exports.getSnapshotBalance = async (accountId, userId) => {
   const query =

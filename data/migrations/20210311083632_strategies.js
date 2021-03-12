@@ -14,6 +14,7 @@ exports.up = (knex) => {
       .inTable('accounts')
       .onDelete('CASCADE');
     table.timestamp('created_at');
+    table.boolean('is_default').notNullable().default(false);
   });
 };
 

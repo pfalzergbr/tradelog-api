@@ -33,19 +33,16 @@ exports.up = (knex) => {
       .notNullable();
       table
       .uuid('user_id')
-      // .foreign('user_id')
       .references('user_id')
       .inTable('users')
       .onDelete('CASCADE');
       table
       .uuid('account_id')
-      // .foreign('account_id')
       .references('account_id')
       .inTable('accounts')
       .onDelete('CASCADE');
       table
       .uuid('strategy_id')
-      // .foreign('strategy_id')
       .references('strategy_id')
       .inTable('strategies')
       .onDelete('CASCADE');

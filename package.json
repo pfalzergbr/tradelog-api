@@ -8,6 +8,7 @@
     "npm": "7.6.0"
   },
   "scripts": {
+    "migrate": "npx knex migrate:latest --knexfile data/knexfile.js",
     "test": "jest --watch",
     "start": "node ./app.js",
     "server": "nodemon ./app.js"

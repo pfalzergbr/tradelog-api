@@ -13,7 +13,6 @@ exports.up = (knex) => {
     table.decimal('opening_balance').notNullable().defaultTo(0);
     table
       .uuid('user_id')
-      // .foreign('user_id')
       .references('user_id')
       .inTable('users')
       .onDelete('CASCADE');

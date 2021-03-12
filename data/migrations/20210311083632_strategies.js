@@ -5,13 +5,11 @@ exports.up = (knex) => {
     table.text('description');
     table
       .uuid('user_id')
-      // .foreign('user_id')
       .references('user_id')
       .inTable('users')
       .onDelete('CASCADE');
     table
       .uuid('account_id')
-      // .foreign('account_id')
       .references('account_id')
       .inTable('accounts')
       .onDelete('CASCADE');

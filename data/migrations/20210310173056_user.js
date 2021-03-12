@@ -5,7 +5,7 @@ exports.up = (knex) => {
       table.string('user_name', 255).notNullable();
       table.string('email', 255).notNullable();
       table.string('password', 255).notNullable();
-      table.timestamp('created_at', [defaultNow])
+      table.timestamp('created_at')
   })
 };
 

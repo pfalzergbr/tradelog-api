@@ -1,6 +1,6 @@
 exports.up = (knex) => {
   return knex.schema.createTable('trades', (table) => {
-    table.uuid('trade_id').primary();
+    table.uuid('trade_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
     table.string('symbol', 255).notNullable();
     table
       .enu('outcome', null, {

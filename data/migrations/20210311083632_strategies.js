@@ -1,6 +1,6 @@
 exports.up = (knex) => {
   return knex.schema.createTable('strategies', (table) => {
-    table.uuid('strategy_id').primary();
+    table.uuid('strategy_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
     table.string('strategy_name', 255).notNullable();
     table.text('description');
     table

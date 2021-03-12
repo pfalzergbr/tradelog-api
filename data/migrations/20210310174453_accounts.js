@@ -1,10 +1,12 @@
 exports.up = (knex) => {
   return knex.schema.createTable('accounts', (table) => {
-    table.uuid('account_id').primary();
+    table.uuid('account_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
     table.string('account_name', 255).notNullable();
     table
-      .enu('currency', ['usd', 'eur', 'gbp', 'jpy'], {
+      // .enu('currency', ['usd', 'eur', 'gbp', 'jpy'], {
+      .enu('currency', null, {
         useNative: true,
+        existingType:true,
         enumName: 'currency_type',
       })
       .notNullable();

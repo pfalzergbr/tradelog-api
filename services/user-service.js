@@ -1,10 +1,11 @@
 const userDb = require('../db/user-db');
+const userDA = require('../dataAccess/user');
 const strategyDb = require('../db/strategy-db');
 const accountDb = require('../db/account-db');
 const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async email => {
-  const user = await userDb.findUserByEmail(email);
+  const user = await userDA.findUserByEmail(email);
   if (user) {
     const error = new Error();
     error.message = 'E-mail already registered, please log in';
@@ -24,12 +25,13 @@ exports.verifyPassword = (password, verify) => {
 };
 
 exports.createUser = async userData => {
-  const user = await userDb.insertUser(userData);
+  const user = await userDA.insertUser(userData);
   return user;
 };
 
 exports.checkLoginEmail = async email => {
-  const user = await userDb.findUserByEmail(email);
+  const user = await userDA.findUserByEmail(email);
+  console.log(user);
   if (!user) {
     const error = new Error();
     error.message = 'Unable to log in';
@@ -49,7 +51,7 @@ exports.checkHashedPassword = async (password, userPassword) => {
 
 //TODO - Add error handling
 exports.getUserProfile = async userId => {
-  const user = await userDb.findUserById(userId);
+  const user = await userDA.findUserById(userId);
   delete user.user_password;
   return user;
 };
@@ -63,11 +65,11 @@ exports.getUserData = async userId => {
 
 //TODO - Add error handling
 exports.updateUserProfile = async (userId, update) => {
-  const user = await userDb.updateUserById(userId, update);
+  const user = await userDA.updateUserById(userId, update);
   return user;
 };
 //TODO - Add error handling
 exports.deleteUser = async userId => {
-  const user = await userDb.deleteUserById(userId);
+  const user = await userDA.deleteUserById(userId);
   return user;
 };

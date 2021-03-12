@@ -1,15 +1,17 @@
 exports.up = (knex) => {
-  return knex.schema.createTable('accounts', (table) => {
-    table.uuid('strategy_i').primary();
+  return knex.schema.createTable('strategies', (table) => {
+    table.uuid('strategy_id').primary();
     table.string('strategy_name', 255).notNullable();
     table.text('description');
     table
-      .foreign('user_id')
+      .uuid('user_id')
+      // .foreign('user_id')
       .references('user_id')
       .inTable('users')
       .onDelete('CASCADE');
     table
-      .foreign('account_id')
+      .uuid('account_id')
+      // .foreign('account_id')
       .references('account_id')
       .inTable('accounts')
       .onDelete('CASCADE');

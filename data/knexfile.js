@@ -12,9 +12,9 @@ module.exports = {
       database: keys.PSQL_DBNAME
     },
     migrations: {
-      directory: './data/migrations',
+      directory: './migrations',
     },
-    seeds: { directory: './data/seeds' },
+    seeds: { directory: './seeds' },
   },
 
   testing: {
@@ -23,7 +23,7 @@ module.exports = {
     migrations: {
       directory: './data/migrations',
     },
-    seeds: { directory: './data/seeds' },
+    seeds: { directory: './seeds' },
   },
 
   production: {
@@ -32,6 +32,6 @@ module.exports = {
     migrations: {
       directory: './data/migrations',
     },
-    seeds: { directory: './data/seeds' },
+    seeds: { directory: './seeds' },
   },
 };

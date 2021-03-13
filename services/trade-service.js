@@ -1,4 +1,5 @@
 const tradeDA = require('../dataAccess/trade');
+const accountDA = require('../dataAccess/account');
 const tradeDb = require('../db/trade-db');
 const accountDb = require('../db/account-db');
 
@@ -27,7 +28,7 @@ exports.createNewTrade = async tradeData => {
     user_id,
   );
   const relativeGain = calcTradeGain(balance, amount);
-  const trade = await tradeDb.insertNewTrade(
+  const trade = await tradeDA.insertNewTrade(
     tradeData,
     balance,
     currency,

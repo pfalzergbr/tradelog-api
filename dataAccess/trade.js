@@ -36,12 +36,13 @@ exports.insertNewTrade = async (
         currency,
         relative_gain,
       })
-      .returning('*');
+      .returning('*')
+      .transacting(trx);
 
     const updatedAccount = await knex('accounts')
       .where({user_id, account_id})
-      .increment('balance', amount,
-      );
+      .increment('balance', amount)
+      .transacting(trx);
 
     await trx.commit();
     return { trade: newTrade[0], account: updatedAccount[0] };
@@ -106,15 +107,49 @@ exports.findTradesByStrategyId = async (user_id, strategy_id) => {
 exports.changeTradeStrategy = async (trade_id, user_id, strategy_id) => {
   const trades = await knex('trades')
     .where({ trade_id, user_id })
-    .update({ strategy_id });
+    .update({ strategy_id })
+    .returning('*')
   return trades[0];
 };
 
-exports.changeTradeDescription = async (trade_id, user_id, description) => {
-  const trades = await knex('trades')
-    .where({ trade_id, user_id })
-    .update({ description });
-  return trades[0];
+exports.changeTradeDescription = async (trade_id, user_id, notes) => {
+  try {
+    const trades = await knex('trades')
+      .where({ trade_id, user_id })
+      .update({ notes })
+      .returning('*')
+    return trades[0];
+    
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
-exports.deleteTradeById = async (trade_id, user_id) => {};
+exports.deleteTradeById = async (trade_id, user_id) => {
+  const trx = await knex.transaction();
+
+  try {
+    const deletedTrade = await knex('trades')
+      .where({trade_id, user_id })
+      .del()
+      .returning(['amount', 'account_id'])
+      .transacting(trx);
+
+    const amount = deletedTrade[0].amount
+    const account_id = deletedTrade[0].account_id
+
+    const updatedAccount = await knex('accounts')
+      .where({user_id, account_id})
+      .decrement('balance', amount)
+      .transacting(trx)
+
+    await trx.commit();
+    return {
+      deletedTrade: deletedTrade[0],
+      account: updatedAccount[0],
+    };
+  } catch (error) {
+    await trx.rollback();
+    
+  }
+};

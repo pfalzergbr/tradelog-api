@@ -1,3 +1,4 @@
+const tradeDA = require('../dataAccess/trade');
 const tradeDb = require('../db/trade-db');
 const accountDb = require('../db/account-db');
 
@@ -44,7 +45,7 @@ exports.getUserTrades = async userId => {
 };
 
 exports.getAccountTrades = async (userId, accountId) => {
-  const trades = await tradeDb.findTradeByAccountId(userId, accountId);
+  const trades = await tradeDA.findTradesByAccountId(userId, accountId);
   return trades;
 };
 

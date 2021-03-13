@@ -1,6 +1,5 @@
 const tradeDA = require('../dataAccess/trade');
 const accountDA = require('../dataAccess/account');
-// const tradeDb = require('../db/trade-db');
 
 const calcTradeGain = (snapshotBalance, tradeAmount) => {
   const relativeGain = ((tradeAmount / snapshotBalance) * 100).toFixed(2);

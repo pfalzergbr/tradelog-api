@@ -1,7 +1,6 @@
-const userDb = require('../db/user-db');
 const userDA = require('../dataAccess/user');
-const strategyDb = require('../db/strategy-db');
-const accountDb = require('../db/account-db');
+const accountDA = require('../dataAccess/account');
+const strategyDA = require('../dataAccess/strategy');
 const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async email => {
@@ -58,8 +57,8 @@ exports.getUserProfile = async userId => {
 
 //Refactor for more effective SQL query
 exports.getUserData = async userId => {
-  const accounts = await accountDb.findAccountsByUserId(userId);
-  const strategies = await strategyDb.findStrategyByUserId(userId);
+  const accounts = await accountDA.findAccountsByUserId(userId);
+  const strategies = await strategyDA.findStrategyByUserId(userId);
   return { accounts, strategies };
 };
 

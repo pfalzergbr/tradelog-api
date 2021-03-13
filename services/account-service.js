@@ -1,6 +1,3 @@
-// const accountDb = require('../db/account-db');
-const tradeDb = require('../db/trade-db');
-const strategyDb = require('../db/strategy-db')
 const accountDA = require('../dataAccess/account');
 const tradeDA = require('../dataAccess/trade');
 
@@ -14,7 +11,7 @@ exports.createNewAccount = async (userId, accountData) => {
     is_default: true
   }
 
-  const strategy = await strategyDb.insertNewStrategy(userId, strategyData);
+  const strategy = await strategyDA.insertNewStrategy(userId, strategyData);
   return { account, strategy };
 };
 

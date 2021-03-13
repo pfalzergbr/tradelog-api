@@ -18,12 +18,12 @@ exports.createNewAccount = async (userId, accountData) => {
 };
 
 exports.getAccounts = async userId => {
-  const accounts = await accountDb.findAccountsByUserId(userId);
+  const accounts = await accountDA.findAccountsByUserId(userId);
   return accounts;
 };
 
 exports.getOneAccount = async (userId, accountId) => {
-  const account = await accountDb.findAccountById(userId, accountId);
+  const account = await accountDA.findAccountById(userId, accountId);
 
   if (!account) {
     const error = new Error();
@@ -36,7 +36,7 @@ exports.getOneAccount = async (userId, accountId) => {
 };
 
 exports.updateAccount = async (userId, updatedData) => {
-  const updatedAccount = await accountDb.updateAccountById(userId, updatedData);
+  const updatedAccount = await accountDA.updateAccountById(userId, updatedData);
 
   if (!updatedAccount) {
     const error = new Error();
@@ -48,7 +48,7 @@ exports.updateAccount = async (userId, updatedData) => {
 };
 
 exports.deleteAccount = async (account_id, user_id) => {
-  const deletedAccount = await accountDb.deleteAccountById(account_id, user_id);
+  const deletedAccount = await accountDA.deleteAccountById(account_id, user_id);
 
   if (!deletedAccount) {
     const error = new Error();

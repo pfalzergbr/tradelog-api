@@ -2,6 +2,7 @@
 const tradeDb = require('../db/trade-db');
 const strategyDb = require('../db/strategy-db')
 const accountDA = require('../dataAccess/account');
+const tradeDA = require('../dataAccess/trade');
 
 exports.createNewAccount = async (userId, accountData) => {
   const account = await accountDA.insertNewAccount(userId, accountData);
@@ -60,7 +61,7 @@ exports.deleteAccount = async (account_id, user_id) => {
 };
 
 exports.getAccountStats = async userId => {
-  const accountStats = await tradeDb.getTradeStatsByAccount(userId);
+  const accountStats = await tradeDA.getTradeStatsByAccount(userId);
 
   const formattedStats = accountStats.map(account => (  {
     ...account, 

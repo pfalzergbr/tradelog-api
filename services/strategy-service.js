@@ -1,5 +1,5 @@
 const strategyDA = require('../dataAccess/strategy');
-// const strategyDb = require('../db/strategy-db');
+const tradeDA = require('../dataAccess/trade');
 const tradeDb = require('../db/trade-db');
 const HttpError = require('../models/http-error');
 
@@ -70,7 +70,7 @@ exports.getAccountStrategies = async (userId, account_id) => {
 };
 
 exports.getStrategyStats = async (userId, accountId) => {
-  const strategyStats = await tradeDb.getTradeStatsByStrategy(
+  const strategyStats = await tradeDA.getTradeStatsByStrategy(
     userId,
     accountId,
   );

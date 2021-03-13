@@ -153,3 +153,69 @@ exports.deleteTradeById = async (trade_id, user_id) => {
     
   }
 };
+
+
+
+exports.getTradeStatsByStrategy = async (user_id, account_id) => {
+  const query = `
+  SELECT 
+      strategy_name, 
+      strategies.strategy_id,
+      strategies.description,
+      strategies.user_id,
+      strategies.account_id,
+      strategies.is_default,
+      sum(amount) AS "total_pnl", 
+      avg(amount)::numeric(10,2) AS "average_amount", 
+      avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
+      avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average_loss", 
+      count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
+      count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
+      count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
+      count(*) AS "num_of_trades" 
+  FROM strategies
+  LEFT JOIN trades ON trades.strategy_id = strategies.strategy_id
+  WHERE strategies.user_id = ? AND strategies.account_id = ?
+  GROUP BY strategies.strategy_id
+  `;
+
+  const trades = await knex.raw(query, [user_id, account_id])
+  return trades.rows;
+}
+
+exports.getTradeStatsByAccount = async user_id => {
+  try {
+    
+  const query = 
+  `SELECT 
+        account_name, 
+        accounts.account_id AS account_id,
+        accounts.user_id,
+        accounts.balance,
+        accounts.opening_balance,
+        accounts.description,
+        accounts.balance,
+        accounts.opening_balance,
+        accounts.currency,
+        sum(amount) AS "total_pnl", 
+        avg(amount)::numeric(10,2) AS "average_amount", 
+        avg(case WHEN amount > 0 THEN amount END)::numeric(10,2) AS "average_profit", 
+        avg(case WHEN amount < 0 THEN amount END)::numeric(10,2) AS "average_loss", 
+        count(case WHEN amount < 0 THEN amount END) AS "num_of_loss", 
+        count(case WHEN amount > 0 THEN amount END) AS "num_of_profit", 
+        count(case WHEN amount = 0 THEN amount END) AS "num_of_be", 
+        count(*) AS "num_of_trades" ,
+        count(DISTINCT trades.strategy_id) AS "num_of_strategies"
+    FROM accounts
+    LEFT JOIN trades ON trades.account_id = accounts.account_id
+    WHERE accounts.user_id = ?
+    GROUP BY accounts.account_id;`;
+
+  const trades = await knex.raw(query, [user_id])
+  return trades.rows;
+
+  
+} catch (error) {
+    console.log(error);
+}
+}

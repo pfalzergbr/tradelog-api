@@ -1,14 +1,15 @@
-const strategyDb = require('../db/strategy-db');
+const strategyDA = require('../dataAccess/strategy');
+const tradeDA = require('../dataAccess/trade');
 const tradeDb = require('../db/trade-db');
 const HttpError = require('../models/http-error');
 
 exports.newStrategy = async (userId, strategyData) => {
-  const strategy = await strategyDb.insertNewStrategy(userId, strategyData);
+  const strategy = await strategyDA.insertNewStrategy(userId, strategyData);
   return strategy;
 };
 
 exports.getOneStrategy = async (userId, strategyId) => {
-  const strategy = await strategyDb.findStrategyById(userId, strategyId);
+  const strategy = await strategyDA.findStrategyById(userId, strategyId);
 
   if (!strategy) {
     const error = new Error();
@@ -21,7 +22,7 @@ exports.getOneStrategy = async (userId, strategyId) => {
 };
 
 exports.updateStrategy = async (userId, updatedData) => {
-  const updatedStrategy = await strategyDb.updateStrategyById(
+  const updatedStrategy = await strategyDA.updateStrategyById(
     userId,
     updatedData,
   );
@@ -38,13 +39,13 @@ exports.updateStrategy = async (userId, updatedData) => {
 
 
 exports.deleteStrategy = async (strategy_id, user_id) => {
-  const strategy = await strategyDb.findStrategyById(user_id, strategy_id)
+  const strategy = await strategyDA.findStrategyById(user_id, strategy_id)
   
   if (strategy.is_default) {
     throw new HttpError('This strategy cannot be deleted manually', 401)
   }
   
-  const deletedStrategy = await strategyDb.deleteStrategyById(
+  const deletedStrategy = await strategyDA.deleteStrategyById(
     strategy_id,
     user_id,
   );
@@ -59,17 +60,17 @@ exports.deleteStrategy = async (strategy_id, user_id) => {
 };
 
 exports.getUserStrategies = async userId => {
-  const strategies = await strategyDb.findStrategyByUserId(userId);
+  const strategies = await strategyDA.findStrategyByUserId(userId);
   return strategies;
 };
 
 exports.getAccountStrategies = async (userId, account_id) => {
-  const strategies = await strategyDb.findStrategyByUserId(userId);
+  const strategies = await strategyDA.findStrategyByUserId(userId);
   return strategies.filter(strategy => strategy.account_id === account_id);
 };
 
 exports.getStrategyStats = async (userId, accountId) => {
-  const strategyStats = await tradeDb.getTradeStatsByStrategy(
+  const strategyStats = await tradeDA.getTradeStatsByStrategy(
     userId,
     accountId,
   );

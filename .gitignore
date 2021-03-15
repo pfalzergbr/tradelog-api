@@ -1,6 +1,7 @@
 config/dev.js
 config/dev.env
 node_modules
+pgdata
 
 utils/userQuery.js
 utils/validationLogic.js

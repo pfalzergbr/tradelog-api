@@ -1,10 +1,10 @@
-const userDb = require('../db/user-db');
-const strategyDb = require('../db/strategy-db');
-const accountDb = require('../db/account-db');
+const userDA = require('../dataAccess/user');
+const accountDA = require('../dataAccess/account');
+const strategyDA = require('../dataAccess/strategy');
 const bcrypt = require('bcrypt');
 
 exports.checkIsEmailRegistered = async email => {
-  const user = await userDb.findUserByEmail(email);
+  const user = await userDA.findUserByEmail(email);
   if (user) {
     const error = new Error();
     error.message = 'E-mail already registered, please log in';
@@ -24,12 +24,13 @@ exports.verifyPassword = (password, verify) => {
 };
 
 exports.createUser = async userData => {
-  const user = await userDb.insertUser(userData);
+  const user = await userDA.insertUser(userData);
   return user;
 };
 
 exports.checkLoginEmail = async email => {
-  const user = await userDb.findUserByEmail(email);
+  const user = await userDA.findUserByEmail(email);
+  console.log(user);
   if (!user) {
     const error = new Error();
     error.message = 'Unable to log in';
@@ -49,25 +50,25 @@ exports.checkHashedPassword = async (password, userPassword) => {
 
 //TODO - Add error handling
 exports.getUserProfile = async userId => {
-  const user = await userDb.findUserById(userId);
+  const user = await userDA.findUserById(userId);
   delete user.user_password;
   return user;
 };
 
 //Refactor for more effective SQL query
 exports.getUserData = async userId => {
-  const accounts = await accountDb.findAccountsByUserId(userId);
-  const strategies = await strategyDb.findStrategyByUserId(userId);
+  const accounts = await accountDA.findAccountsByUserId(userId);
+  const strategies = await strategyDA.findStrategyByUserId(userId);
   return { accounts, strategies };
 };
 
 //TODO - Add error handling
 exports.updateUserProfile = async (userId, update) => {
-  const user = await userDb.updateUserById(userId, update);
+  const user = await userDA.updateUserById(userId, update);
   return user;
 };
 //TODO - Add error handling
 exports.deleteUser = async userId => {
-  const user = await userDb.deleteUserById(userId);
+  const user = await userDA.deleteUserById(userId);
   return user;
 };

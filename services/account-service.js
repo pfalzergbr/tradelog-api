@@ -1,11 +1,9 @@
-const accountDb = require('../db/account-db');
-const tradeDb = require('../db/trade-db');
-const strategyDb = require('../db/strategy-db')
-
+const accountDA = require('../dataAccess/account');
+const tradeDA = require('../dataAccess/trade');
 
 exports.createNewAccount = async (userId, accountData) => {
-  const account = await accountDb.insertNewAccount(userId, accountData);
-  
+  const account = await accountDA.insertNewAccount(userId, accountData);
+
   const strategyData = {
     strategy_name: 'No strategy',
     account_id: account.account_id,
@@ -13,18 +11,17 @@ exports.createNewAccount = async (userId, accountData) => {
     is_default: true
   }
 
-  const strategy = await strategyDb.insertNewStrategy(userId, strategyData);
+  const strategy = await strategyDA.insertNewStrategy(userId, strategyData);
   return { account, strategy };
 };
 
 exports.getAccounts = async userId => {
-  const accounts = await accountDb.findAccountsByUserId(userId);
+  const accounts = await accountDA.findAccountsByUserId(userId);
   return accounts;
 };
 
 exports.getOneAccount = async (userId, accountId) => {
-  const account = await accountDb.findAccountById(userId, accountId);
-  console.log(account);
+  const account = await accountDA.findAccountById(userId, accountId);
 
   if (!account) {
     const error = new Error();
@@ -37,7 +34,7 @@ exports.getOneAccount = async (userId, accountId) => {
 };
 
 exports.updateAccount = async (userId, updatedData) => {
-  const updatedAccount = await accountDb.updateAccountById(userId, updatedData);
+  const updatedAccount = await accountDA.updateAccountById(userId, updatedData);
 
   if (!updatedAccount) {
     const error = new Error();
@@ -49,7 +46,7 @@ exports.updateAccount = async (userId, updatedData) => {
 };
 
 exports.deleteAccount = async (account_id, user_id) => {
-  const deletedAccount = await accountDb.deleteAccountById(account_id, user_id);
+  const deletedAccount = await accountDA.deleteAccountById(account_id, user_id);
 
   if (!deletedAccount) {
     const error = new Error();
@@ -61,7 +58,7 @@ exports.deleteAccount = async (account_id, user_id) => {
 };
 
 exports.getAccountStats = async userId => {
-  const accountStats = await tradeDb.getTradeStatsByAccount(userId);
+  const accountStats = await tradeDA.getTradeStatsByAccount(userId);
 
   const formattedStats = accountStats.map(account => (  {
     ...account, 

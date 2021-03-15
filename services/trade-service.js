@@ -1,5 +1,5 @@
-const tradeDb = require('../db/trade-db');
-const accountDb = require('../db/account-db');
+const tradeDA = require('../dataAccess/trade');
+const accountDA = require('../dataAccess/account');
 
 const calcTradeGain = (snapshotBalance, tradeAmount) => {
   const relativeGain = ((tradeAmount / snapshotBalance) * 100).toFixed(2);
@@ -21,40 +21,40 @@ exports.formatTrade = tradeData => {
 
 exports.createNewTrade = async tradeData => {
   const { account, user_id, amount } = tradeData;
-  const { balance, currency } = await accountDb.getSnapshotBalance(
+  const { balance, currency } = await accountDA.getSnapshotBalance(
     account,
     user_id,
   );
   const relativeGain = calcTradeGain(balance, amount);
-  const trade = await tradeDb.insertNewTrade(
+  const trade = await tradeDA.insertNewTrade(
     tradeData,
     balance,
     currency,
     relativeGain,
   );
   //TODO little hacky, try find a better solution
-  const {strategy_name} = await tradeDb.findTradeById(user_id, trade.trade.trade_id);
+  const {strategy_name} = await tradeDA.findTradeById(user_id, trade.trade.trade_id);
 
   return {trade: {...trade.trade, strategy_name}, account: trade.account};
 };
 
 exports.getUserTrades = async userId => {
-  const trades = await tradeDb.findTradeByUserId(userId);
+  const trades = await tradeDA.findTradeByUserId(userId);
   return trades;
 };
 
 exports.getAccountTrades = async (userId, accountId) => {
-  const trades = await tradeDb.findTradeByAccountId(userId, accountId);
+  const trades = await tradeDA.findTradesByAccountId(userId, accountId);
   return trades;
 };
 
 exports.getStrategyTrades = async (userId, strategyId) => {
-  const trades = await tradeDb.findTradeByStrategyId(userId, strategyId);
+  const trades = await tradeDA.findTradesByStrategyId(userId, strategyId);
   return trades;
 };
 
 exports.getTradeById = async (userId, tradeId) => {
-  const trade = await tradeDb.findTradeById(userId, tradeId);
+  const trade = await tradeDA.findTradeById(userId, tradeId);
 
   if (!trade) {
     const error = new Error();
@@ -66,11 +66,11 @@ exports.getTradeById = async (userId, tradeId) => {
   return trade;
 };
 
-exports.updateTradeStrategy = async (trade_id, userId, updates) => {
+exports.updateTradeStrategy = async (trade_id, user_id, updates) => {
   if (updates.strategy) {
-    const updatedTrade = await tradeDb.changeTradeStrategy(
+    const updatedTrade = await tradeDA.changeTradeStrategy(
       trade_id,
-      userId,
+      user_id,
       updates.strategy,
     );
 
@@ -83,11 +83,12 @@ exports.updateTradeStrategy = async (trade_id, userId, updates) => {
 
     return updatedTrade;
   } else if (updates.notes) {
-    const updatedTrade = await tradeDb.changeTradeDescription(
+    const updatedTrade = await tradeDA.changeTradeDescription(
       trade_id,
-      userId,
+      user_id,
       updates.notes,
     );
+   
 
     if (!updatedTrade) {
       const error = new Error();
@@ -102,7 +103,7 @@ exports.updateTradeStrategy = async (trade_id, userId, updates) => {
 };
 
 exports.deleteTrade = async (trade_id, user_id) => {
-  const deletedTrade = await tradeDb.deleteTradeById(trade_id, user_id);
+  const deletedTrade = await tradeDA.deleteTradeById(trade_id, user_id);
 
   if (!deletedTrade) {
     const error = new Error();

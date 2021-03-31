@@ -1,6 +1,5 @@
 const strategyDA = require('../dataAccess/strategy');
 const tradeDA = require('../dataAccess/trade');
-const tradeDb = require('../db/trade-db');
 const HttpError = require('../models/http-error');
 
 exports.newStrategy = async (userId, strategyData) => {

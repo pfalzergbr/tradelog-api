@@ -9,7 +9,7 @@ module.exports = {
       host: keys.PSQL_HOST,
       user: keys.PSQL_USER,
       password: keys.PSQL_PASSWORD,
-      database: keys.PSQL_DBNAME,
+      database: keys.PSQL_DBNAME
     },
     migrations: {
       directory: './migrations',
@@ -28,13 +28,7 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: {
-      host: keys.PSQL_HOST,
-      user: keys.PSQL_USER,
-      password: keys.PSQL_PASSWORD,
-      database: keys.PSQL_DBNAME,
-      port: keys.PSQL_PORT
-    },
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: './data/migrations',
     },

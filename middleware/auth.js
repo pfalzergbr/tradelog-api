@@ -1,7 +1,8 @@
 //Requires
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
-const pool = require('../db/db');
+
+const userDA = require('../dataAccess/user')
 
 //Enviromental Variables
 const jwtSecret = keys.JWT_SECRET;
@@ -11,13 +12,11 @@ const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
     const decoded = jwt.verify(token, jwtSecret);
+    const user = await userDA.findUserById(decoded)
 
-    const result = await pool.query(
-      'SELECT user_id, user_name, user_email FROM users WHERE user_id = $1',
-      [decoded.user_id],
-    );
+    // console.log(result)
 
-    const user = result.rows[0];
+    // const user = result.rows[0];
 
     if (!user) {
       throw new Error();

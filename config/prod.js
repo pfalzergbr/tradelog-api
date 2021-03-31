@@ -8,4 +8,5 @@ module.exports = {
   PSQL_PORT: process.env.PSQL_PORT,
   PSQL_HOST: process.env.PSQL_HOST,
   PSQL_DBNAME: process.env.PSQL_DBNAME,
+  DATABASE_URL: process.env.DATABASE_URL
 }

@@ -28,7 +28,14 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL,
+    connection: {
+      host: keys.PSQL_HOST,
+      user: keys.PSQL_USER,
+      password: keys.PSQL_PASSWORD,
+      database: keys.PSQL_DBNAME,
+      port: keys.PSQL_PORT,
+      ssl: true
+    },
     migrations: {
       directory: './data/migrations',
     },

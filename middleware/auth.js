@@ -12,9 +12,8 @@ const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
     const decoded = jwt.verify(token, jwtSecret);
-    const user = await userDA.findUserById(decoded)
+    const user = await userDA.findUserById(decoded.user_id)
 
-    // console.log(result)
 
     // const user = result.rows[0];
 
